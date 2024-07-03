@@ -1,0 +1,132 @@
+body {
+  font-family: sans-serif;
+  background-color: #1e293b;
+}
+
+.item-button button {
+  margin-top: 20px;
+  width: 200px;
+  background-color: rgb(9, 78, 60);
+  color: white;
+  border-radius: 8px;
+}
+
+.invoice-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding-inline: 25px;
+  border: none;
+  background-color: #2f81f7;
+  color: #cbd5e1;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+}
+
+.spinner-border {
+  height: 50px;
+  width: 50px;
+}
+.test-creds{
+  font-size: 12px;
+}
+
+.category {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 6px;
+  padding-inline: 20px;
+  margin-right: 20px;
+  border: 1px solid #8b949e;
+  border-radius: 10px;
+  background-color: #1e293b;
+  transition: background-color 0.2s ease-in-out, scale 0.1s ease-in-out;
+}
+
+.category:hover {
+  background-color: #020617;
+  cursor: pointer;
+  scale: 1.05;
+}
+.category-active:hover {
+  background-color: #589eff;
+}
+
+.category h4 {
+  color: white !important;
+  font-size: 18px;
+}
+
+.category-active {
+  background-color: #2f81f7;
+  color: #fff;
+}
+
+.category-active img {
+  filter: brightness(0) invert(1);
+}
+
+
+.register {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  background-color: #1e293b;
+}
+
+.register input {
+  width: 400px !important;
+  border-radius: 8px;
+}
+.register input:focus {
+  width: 400px !important;
+  border: 1px solid #2f81f7;
+}
+
+.regsiter-form {
+  border-radius: 10px;
+  border: 1px solid #8b949e;
+  background-color: #334155;
+  padding: 20px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px;
+}
+
+.regsiter-form h1 {
+  text-align: center;
+  font-size: 28px;
+}
+
+.regsiter-form h2 {
+  color: #2f81f7;
+  text-align: center;
+  font-size: 18px;
+}
+
+.regsiter-form label {
+  color: #cbd5e1 !important;
+}
+
+.regsiter-form p {
+  font-size: 16px;
+  color: #cbd5e1;
+}
+
+.regsiter-form button {
+  border-radius: 8px;
+  width: 100%;
+}
