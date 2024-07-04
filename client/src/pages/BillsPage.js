@@ -92,8 +92,12 @@ const BillsPage = () => {
             <center id="top">
               <div className="logo" />
               <div className="info">
-                <h2>Shop</h2>
-                <p> Contact : 9234445834 | Delhi, India</p>
+                <h2>Mallick Musical Co.</h2>
+                <p style={{ textAlign: "center" }}>
+                  {" "}
+                  38 Gariahat Road, Identity Apartment, Shop No :
+                  3 ,Kolkata 700031
+                </p>
               </div>
               {/*End Info*/}
             </center>
@@ -137,14 +141,14 @@ const BillsPage = () => {
                             <p className="itemtext">{item.name}</p>
                           </td>
                           <td className="tableitem">
-                            <p className="itemtext">{item.quantity}</p>
+                            <p className="itemtext">{item.billQuantity}</p>
                           </td>
                           <td className="tableitem">
-                            <p className="itemtext">{item.price}</p>
+                            <p className="itemtext">{item.newPrice}</p>
                           </td>
                           <td className="tableitem">
                             <p className="itemtext">
-                              {item.quantity * item.price}
+                              {item.billQuantity * item.newPrice}
                             </p>
                           </td>
                         </tr>

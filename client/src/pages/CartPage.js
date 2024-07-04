@@ -17,18 +17,27 @@ const CartPage = () => {
   const { billItems } = useSelector((state) => state.rootReducer);
   //handle increament
   const handleIncreament = (record) => {
-    dispatch({
-      type: "UPDATE_CART",
-      payload: { ...record, quantity: record.quantity + 1 },
-    });
-  };
-  const handleDecreament = (record) => {
-    if (record.quantity !== 1) {
+    if (record.quantity !== 1)
       dispatch({
         type: "UPDATE_CART",
-        payload: { ...record, quantity: record.quantity - 1 },
+        payload: {
+          ...record,
+          billQuantity: record.billQuantity + 1,
+          quantity: record.quantity - 1,
+        },
       });
-    }
+    console.log(record);
+  };
+  const handleDecreament = (record) => {
+    if (record.billQuantity !== 1)
+      dispatch({
+        type: "UPDATE_CART",
+        payload: {
+          ...record,
+          billQuantity: record.billQuantity - 1,
+          quantity: record.quantity + 1,
+        },
+      });
   };
   const columns = [
     { title: "Name", dataIndex: "name" },
@@ -40,7 +49,15 @@ const CartPage = () => {
     //   ),
     // },
     { title: "Price", dataIndex: "newPrice" },
-    { title: "Stock", dataIndex: "quantity" },
+    {
+      title: "Stock",
+      dataIndex: "_id",
+      render: (id, record) => (
+        <div>
+          <b>{record.quantity - 1}</b>
+        </div>
+      ),
+    },
     {
       title: "Quantity",
       dataIndex: "_id",
@@ -52,7 +69,7 @@ const CartPage = () => {
             onClick={() => handleDecreament(record)}
           />
 
-          <b>{record.quantity}</b>
+          <b>{record.billQuantity}</b>
 
           <PlusCircleOutlined
             className="mx-3"
@@ -81,7 +98,9 @@ const CartPage = () => {
 
   useEffect(() => {
     let temp = 0;
-    billItems.forEach((item) => (temp = temp + item.newPrice * item.quantity));
+    billItems.forEach(
+      (item) => (temp = temp + item.newPrice * item.billQuantity)
+    );
     setSubTotal(temp);
   }, [billItems]);
 
@@ -152,10 +171,7 @@ const CartPage = () => {
             </h4>
             <h4>
               Grand total :{" "}
-              <b>
-                ₹{" "}
-                {Number(subTotal) + Number(((subTotal / 100) * 10).toFixed(2))}
-              </b>
+              <b>₹ {(subTotal + (subTotal / 100) * 18).toFixed(2)}</b>
             </h4>
           </div>
           <div className="d-flex justify-content-end">

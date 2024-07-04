@@ -7,7 +7,7 @@ const ItemList = ({ item }) => {
   const handleAddTOCart = () => {
     dispatch({
       type: "ADD_TO_CART",
-      payload: { ...item, quantity: 1 },
+      payload: { ...item, billQuantity: 1 },
     });
   };
   const { Meta } = Card;
@@ -32,7 +32,12 @@ const ItemList = ({ item }) => {
         <p style={{ fontSize: 14, marginTop: 20 }}>Price: ₹ {item.newPrice}</p>
         <p style={{ fontSize: 14, marginTop: -8 }}>Stock: {item.quantity}</p>
         <div className="item-button">
-          <Button onClick={() => handleAddTOCart()}>Add to cart</Button>
+          <Button
+            onClick={() => handleAddTOCart()}
+            disabled={item.quantity === 0}
+          >
+            Add to cart
+          </Button>
         </div>
       </Card>
     </div>

@@ -9,19 +9,3 @@ exports.getAllReports = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-exports.createReport = async (req, res) => {
-  const report = new ProfitReport({
-    month: req.body.month,
-    revenue: req.body.revenue,
-    expenses: req.body.expenses,
-    profit: req.body.revenue - req.body.expenses,
-  });
-
-  try {
-    const newReport = await report.save();
-    res.status(201).json(newReport);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};

@@ -21,7 +21,7 @@ const addBillsController = async (req, res) => {
         },
         {
           $inc: {
-            quantity: -item.quantity,
+            quantity: -item.billQuantity,
           },
         }
       );

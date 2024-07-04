@@ -171,10 +171,10 @@ const ItemPage = () => {
             <Form.Item name="name" label="Name">
               <Input style={{ borderRadius: 5 }} />
             </Form.Item>
-            <Form.Item name="price" label="Price">
+            <Form.Item name="price" label="Cost">
               <Input style={{ borderRadius: 5 }} />
             </Form.Item>
-            <Form.Item name="newPrice" label="New price">
+            <Form.Item name="newPrice" label="Selling price">
               <Input style={{ borderRadius: 5 }} />
             </Form.Item>
             <Form.Item name="quantity" label="Quantity">
