@@ -130,9 +130,8 @@ const BillsPage = () => {
           {/* ============ invoice modal start ==============  */}
           <div id="invoice-POS" ref={componentRef}>
             <center id="top">
-              <div className="logo" />
               <div className="info">
-                <h2>Mallick Musical Co.</h2>
+                <h2>Mallick Musical Company</h2>
                 <p style={{ textAlign: "center" }}>
                   {" "}
                   38 Gariahat Road, Identity Apartment, Shop No :
