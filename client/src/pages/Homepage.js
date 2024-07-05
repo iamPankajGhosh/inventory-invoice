@@ -3,6 +3,7 @@ import DefaultLayout from "./../components/DefaultLayout";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import ItemList from "../components/ItemList";
+import { SearchOutlined } from "@ant-design/icons";
 const Homepage = () => {
   const [itemsData, setItemsData] = useState([]);
   const [selecedCategory, setSelecedCategory] = useState("Guitar");
@@ -27,6 +28,22 @@ const Homepage = () => {
     },
   ];
   const dispatch = useDispatch();
+  const [searchValue, setSearchValue] = useState("");
+  const [tempData, setTempData] = useState(null);
+
+  // handle search using serial no.
+  const handleSearch = (value) => {
+    console.log(value);
+    const filteredItems = tempData.filter((item) =>
+      item.serialNo.toLowerCase().includes(value.toLowerCase())
+    );
+
+    if (filteredItems.length > 0) {
+      setItemsData(filteredItems);
+    } else {
+      setItemsData(tempData);
+    }
+  };
 
   //useEffect
   useEffect(() => {
@@ -38,6 +55,7 @@ const Homepage = () => {
         const { data } = await axios.get(
           `${process.env.REACT_APP_SERVER_URL}/api/items/get-item`
         );
+        setTempData(data);
         setItemsData(data);
         dispatch({ type: "HIDE_LOADING" });
         console.log(data);
@@ -49,7 +67,25 @@ const Homepage = () => {
   }, [dispatch]);
   return (
     <DefaultLayout>
-      <div className="d-flex">
+      <div className="home-header">
+        <h3 style={{ fontWeight: 600 }}>Items</h3>
+
+        <div className="searchbar">
+          <input
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value.trim())}
+            placeholder="Serial no."
+            className="search-field"
+          />
+          <button
+            className="search-icon"
+            onClick={() => handleSearch(searchValue)}
+          >
+            <SearchOutlined />
+          </button>
+        </div>
+      </div>
+      <div className="d-flex mb-4">
         {categories.map((category) => (
           <div
             key={category.name}

@@ -29,8 +29,15 @@ const ItemList = ({ item }) => {
           style={{ height: 200, width: "100%", objectFit: "cover" }}
         /> */}
         <Meta title={item.name} />
-        <p style={{ fontSize: 14, marginTop: 20 }}>Price: ₹ {item.newPrice}</p>
-        <p style={{ fontSize: 14, marginTop: -8 }}>Stock: {item.quantity}</p>
+        <p style={{ fontSize: 14, marginTop: 10 }}>
+          <b>Price :</b> ₹ {item.price}
+        </p>
+        <p style={{ fontSize: 14, marginTop: -8 }}>
+          <b>Serial No :</b> {item.serialNo}
+        </p>
+        <p style={{ fontSize: 14, marginTop: -8 }}>
+          <b>In stock :</b> {item.quantity}
+        </p>
         <div className="item-button">
           <Button
             onClick={() => handleAddTOCart()}

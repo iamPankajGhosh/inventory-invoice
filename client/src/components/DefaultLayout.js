@@ -111,7 +111,7 @@ const DefaultLayout = ({ children }) => {
             className="cart-item d-flex justify-content-space-between flex-row"
             onClick={() => navigate("/cart")}
           >
-            <div style={{ position: "relative" }}>
+            <div style={{ position: "relative", display: "flex", gap: 10 }}>
               <button className="invoice-btn">Invoice</button>
               {billItems.length > 0 && (
                 <p

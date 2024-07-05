@@ -130,3 +130,42 @@ body {
   border-radius: 8px;
   width: 100%;
 }
+
+.searchbar{
+  background-color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  padding-inline-start: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.search-field{
+  font-size: 16px;
+  border: none;
+  height: 30px;
+  padding: 5px;
+  background-color: #cbd5e1;
+}
+
+.search-field:focus{
+  border: none;
+  outline: none;
+}
+
+.search-icon{
+  height: 35px;
+  background-color: #2f81f7;
+  border: none;
+  padding-top: 5px;
+  padding-inline-end: 15px;
+  text-align: center;
+}
+
+.home-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+}
