@@ -57,6 +57,7 @@ const ItemPage = () => {
 
   //able data
   const columns = [
+    { title: "Serial No.", dataIndex: "serialNo" },
     { title: "Name", dataIndex: "name" },
     // {
     //   title: "Image",
@@ -66,7 +67,7 @@ const ItemPage = () => {
     //   ),
     // },
     // { title: "Price", dataIndex: "price" },
-    { title: "Price (Rs.)", dataIndex: "newPrice" },
+    { title: "Price (Rs.)", dataIndex: "price" },
     { title: "Quantity", dataIndex: "quantity" },
     {
       title: "Actions",
@@ -168,23 +169,14 @@ const ItemPage = () => {
             onFinish={handleSubmit}
             // onFinish={notAllowed}
           >
+            <Form.Item name="serialNo" label="Serial No.">
+              <Input placeholder="Item serial no" style={{ borderRadius: 5 }} />
+            </Form.Item>
             <Form.Item name="name" label="Name">
-              <Input style={{ borderRadius: 5 }} />
+              <Input placeholder="Item name" style={{ borderRadius: 5 }} />
             </Form.Item>
-            <Form.Item name="price" label="Cost">
-              <Input style={{ borderRadius: 5 }} />
-            </Form.Item>
-            <Form.Item name="newPrice" label="Selling price">
-              <Input style={{ borderRadius: 5 }} />
-            </Form.Item>
-            <Form.Item name="quantity" label="Quantity">
-              <Input style={{ borderRadius: 5 }} />
-            </Form.Item>
-            {/* <Form.Item name="image" label="Image URL">
-              <Input />
-            </Form.Item> */}
             <Form.Item name="category" label="Category">
-              <Select>
+              <Select placeholder="Select category">
                 <Select.Option value="Guitar">Guitar</Select.Option>
                 <Select.Option value="Flute">Flute</Select.Option>
                 <Select.Option value="Drum">Drum</Select.Option>
@@ -193,6 +185,15 @@ const ItemPage = () => {
                 <Select.Option value="Piano">Piano</Select.Option>
               </Select>
             </Form.Item>
+            <Form.Item name="price" label="Cost">
+              <Input placeholder="Item cost" style={{ borderRadius: 5 }} />
+            </Form.Item>
+            <Form.Item name="quantity" label="Quantity">
+              <Input placeholder="Item quantity" style={{ borderRadius: 5 }} />
+            </Form.Item>
+            {/* <Form.Item name="image" label="Image URL">
+              <Input />
+            </Form.Item> */}
 
             <div className="d-flex justify-content-end">
               <Button type="primary" htmlType="submit">
