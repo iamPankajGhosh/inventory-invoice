@@ -7,6 +7,7 @@ import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import { Modal, Button, Table, message } from "antd";
 import "../styles/InvoiceStyles.css";
+import { render } from "react-dom";
 const BillsPage = () => {
   const componentRef = useRef();
   const dispatch = useDispatch();
@@ -65,7 +66,14 @@ const BillsPage = () => {
 
   //able data
   const columns = [
-    { title: "Cutomer Id ", dataIndex: "_id" },
+    { title: "Invoice Id", dataIndex: "_id" },
+    {
+      title: "Date",
+      dataIndex: "_id",
+      render: (id, record) => (
+        <div>{record.createdAt.toString().substring(0, 10)}</div>
+      ),
+    },
     {
       title: "Cutomer Name",
       dataIndex: "customerName",
