@@ -3,7 +3,8 @@ import DefaultLayout from "./../components/DefaultLayout";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import ItemList from "../components/ItemList";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, PlusCircleFilled } from "@ant-design/icons";
+import { message } from "antd";
 const Homepage = () => {
   const [itemsData, setItemsData] = useState([]);
   const [selecedCategory, setSelecedCategory] = useState("Guitar");
@@ -65,24 +66,37 @@ const Homepage = () => {
     };
     getAllItems();
   }, [dispatch]);
+
+  const handleAddCategory = () => {
+    console.log("Add Category");
+    message.error("This feature is under development");
+  };
+
   return (
     <DefaultLayout>
       <div className="home-header">
-        <h3 style={{ fontWeight: 600 }}>Items</h3>
-
-        <div className="searchbar">
-          <input
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value.trim())}
-            placeholder="Serial no."
-            className="search-field"
-          />
-          <button
-            className="search-icon"
-            onClick={() => handleSearch(searchValue)}
-          >
-            <SearchOutlined />
+        <h3 style={{ fontWeight: 600, fontSize: 20 }}>Items</h3>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <button className="add-category" onClick={() => handleAddCategory()}>
+            <span>
+              <PlusCircleFilled />
+            </span>
+            <p>Add Category</p>
           </button>
+          <div className="searchbar">
+            <input
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value.trim())}
+              placeholder="Serial no."
+              className="search-field"
+            />
+            <button
+              className="search-icon"
+              onClick={() => handleSearch(searchValue)}
+            >
+              <SearchOutlined />
+            </button>
+          </div>
         </div>
       </div>
       <div className="d-flex mb-4">

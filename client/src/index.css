@@ -47,9 +47,9 @@ body {
   justify-content: center;
   padding-top: 6px;
   padding-inline: 20px;
-  margin-right: 20px;
+  margin-right: 10px;
   border: 1px solid #8b949e;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: #1e293b;
   transition: background-color 0.2s ease-in-out, scale 0.1s ease-in-out;
 }
@@ -57,7 +57,6 @@ body {
 .category:hover {
   background-color: #020617;
   cursor: pointer;
-  scale: 1.05;
 }
 .category-active:hover {
   background-color: #589eff;
@@ -65,7 +64,7 @@ body {
 
 .category h4 {
   color: white !important;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .category-active {
@@ -129,6 +128,31 @@ body {
 .regsiter-form button {
   border-radius: 8px;
   width: 100%;
+}
+
+.add-category{
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: #334155;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  padding-top: 10px;
+  height: 35px;
+  transition: 200ms ease-in-out;
+}
+
+.add-category:is(:hover,:focus){
+  background-color: #2f81f7;
+}
+
+.add-category p {
+  color: #cbd5e1;
+  font-size: 16px;
+  margin-left: 8px;
+  margin-top: 10px;
+  margin-right: 12px;
 }
 
 .searchbar{
