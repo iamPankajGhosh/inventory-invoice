@@ -48,7 +48,6 @@ const CartPage = () => {
     //     <img src={image} alt={record.name} height="60" width="60" />
     //   ),
     // },
-    { title: "Price", dataIndex: "newPrice" },
     {
       title: "Stock",
       dataIndex: "_id",
@@ -79,6 +78,7 @@ const CartPage = () => {
         </div>
       ),
     },
+    { title: "Price", dataIndex: "price" },
     {
       title: "Actions",
       dataIndex: "_id",
@@ -98,9 +98,7 @@ const CartPage = () => {
 
   useEffect(() => {
     let temp = 0;
-    billItems.forEach(
-      (item) => (temp = temp + item.newPrice * item.billQuantity)
-    );
+    billItems.forEach((item) => (temp = temp + item.price * item.billQuantity));
     setSubTotal(temp);
   }, [billItems]);
 
@@ -133,7 +131,7 @@ const CartPage = () => {
   };
   return (
     <DefaultLayout>
-      <h1>Cart Page</h1>
+      <h1>Invoice</h1>
       <Table columns={columns} dataSource={billItems} bordered />
       <div className="d-flex flex-column align-items-end">
         <hr />

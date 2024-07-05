@@ -57,7 +57,18 @@ const getBillsController = async (req, res) => {
   }
 };
 
+//delete bill data
+const deleteBillsController = async (req, res) => {
+  try {
+    await billsModel.findByIdAndDelete(req.body.id);
+    res.send("Bill Deleted Successfully");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   addBillsController,
   getBillsController,
+  deleteBillsController,
 };

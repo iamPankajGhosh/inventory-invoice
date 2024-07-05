@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useDispatch } from "react-redux";
-import { EyeOutlined } from "@ant-design/icons";
+import { EyeOutlined, DeleteOutlined } from "@ant-design/icons";
 // import ReactToPrint from "react-to-print";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
-import { Modal, Button, Table } from "antd";
+import { Modal, Button, Table, message } from "antd";
 import "../styles/InvoiceStyles.css";
 const BillsPage = () => {
   const componentRef = useRef();
@@ -29,6 +29,30 @@ const BillsPage = () => {
       console.log(error);
     }
   };
+
+  //delete bills
+  const handleDelete = async (id) => {
+    try {
+      dispatch({
+        type: "SHOW_LOADING",
+      });
+      await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/api/bills/delete-bills`,
+        {
+          id,
+        }
+      );
+      getAllBills();
+      message.success("Bill Deleted Succesfully");
+      setPopupModal(false);
+      dispatch({ type: "HIDE_LOADING" });
+    } catch (error) {
+      dispatch({ type: "HIDE_LOADING" });
+      message.error("Something Went Wrong");
+      console.log(error);
+    }
+  };
+
   //useEffect
   useEffect(() => {
     getAllBills();
@@ -41,7 +65,7 @@ const BillsPage = () => {
 
   //able data
   const columns = [
-    { title: "ID ", dataIndex: "_id" },
+    { title: "Cutomer Id ", dataIndex: "_id" },
     {
       title: "Cutomer Name",
       dataIndex: "customerName",
@@ -61,6 +85,14 @@ const BillsPage = () => {
             onClick={() => {
               setSelectedBill(record);
               setPopupModal(true);
+            }}
+          />
+
+          <DeleteOutlined
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              console.log(record._id);
+              handleDelete(record._id);
             }}
           />
         </div>
@@ -144,11 +176,11 @@ const BillsPage = () => {
                             <p className="itemtext">{item.billQuantity}</p>
                           </td>
                           <td className="tableitem">
-                            <p className="itemtext">{item.newPrice}</p>
+                            <p className="itemtext">{item.price}</p>
                           </td>
                           <td className="tableitem">
                             <p className="itemtext">
-                              {item.billQuantity * item.newPrice}
+                              {item.billQuantity * item.price}
                             </p>
                           </td>
                         </tr>
