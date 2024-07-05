@@ -117,16 +117,24 @@ const CartPage = () => {
   //handleSubmit
   const handleSubmit = async (value) => {
     try {
+      if (
+        sellingPrice === 0 ||
+        [value.customerName, value.customerNumber].some(
+          (item) => item.trim() === ""
+        )
+      ) {
+        return message.error("Please fill all the fields");
+      }
+
       const newObject = {
         ...value,
         billItems,
         subTotal,
-        tax: Number(((subTotal / 100) * 18).toFixed(2)),
-        totalAmount: Number(
-          Number(subTotal) + Number(((subTotal / 100) * 18).toFixed(2))
-        ),
+        tax: gstAmount,
+        totalAmount: grandTotal,
         userId: JSON.parse(localStorage.getItem("auth"))._id,
       };
+
       // console.log(newObject);
       const res = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/api/bills/add-bills`,
