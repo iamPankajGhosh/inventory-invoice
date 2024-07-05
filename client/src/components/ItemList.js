@@ -30,13 +30,13 @@ const ItemList = ({ item }) => {
         /> */}
         <Meta title={item.name} />
         <p style={{ fontSize: 14, marginTop: 10 }}>
-          <b>Price :</b> ₹ {item.price}
+          <b>Serial No : </b> {item.serialNo}
         </p>
         <p style={{ fontSize: 14, marginTop: -8 }}>
-          <b>Serial No :</b> {item.serialNo}
+          <b>Cost : </b> ₹ {item.price}
         </p>
         <p style={{ fontSize: 14, marginTop: -8 }}>
-          <b>In stock :</b> {item.quantity}
+          <b>Stock count : </b> {item.quantity}
         </p>
         <div className="item-button">
           <Button

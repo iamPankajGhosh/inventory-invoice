@@ -9,12 +9,18 @@ import {
   MinusCircleOutlined,
 } from "@ant-design/icons";
 import { Table, Button, Modal, message, Form, Input, Select } from "antd";
+import { render } from "react-dom";
 const CartPage = () => {
   const [subTotal, setSubTotal] = useState(0);
   const [billPopup, setBillPopup] = useState(false);
+  const [sellingPrice, setSellingPrice] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { billItems } = useSelector((state) => state.rootReducer);
+
+  let gstAmount = ((sellingPrice / 100) * 18).toFixed(2);
+  let grandTotal = (Number(sellingPrice) + Number(gstAmount)).toFixed(2);
+
   //handle increament
   const handleIncreament = (record) => {
     if (record.quantity !== 1)
@@ -78,29 +84,35 @@ const CartPage = () => {
         </div>
       ),
     },
-    { title: "Price", dataIndex: "price" },
+    {
+      title: "Price",
+      dataIndex: "price",
+    },
     {
       title: "Actions",
       dataIndex: "_id",
       render: (id, record) => (
         <DeleteOutlined
           style={{ cursor: "pointer" }}
-          onClick={() =>
+          onClick={() => {
+            setSellingPrice(0);
             dispatch({
               type: "DELETE_FROM_CART",
               payload: record,
-            })
-          }
+            });
+          }}
         />
       ),
     },
   ];
 
   useEffect(() => {
-    let temp = 0;
-    billItems.forEach((item) => (temp = temp + item.price * item.billQuantity));
-    setSubTotal(temp);
-  }, [billItems]);
+    let subTotalCalc = 0;
+    billItems.forEach((item) => {
+      subTotalCalc += item.billQuantity * item.price;
+    });
+    setSubTotal(subTotalCalc);
+  }, [billItems, sellingPrice]);
 
   //handleSubmit
   const handleSubmit = async (value) => {
@@ -138,6 +150,15 @@ const CartPage = () => {
         <h3>
           Sub Total : ₹ <b> {subTotal}</b> /-{" "}
         </h3>
+        <div className="selling-price">
+          <h3 style={{ margin: 0 }}>Selling Price : ₹</h3>
+          <input
+            placeholder="Price"
+            value={sellingPrice}
+            onChange={(e) => setSellingPrice(e.target.value)}
+            className="price-input"
+          />
+        </div>
         <Button type="primary" onClick={() => setBillPopup(true)}>
           Create Invoice
         </Button>
@@ -163,13 +184,10 @@ const CartPage = () => {
             </Select>
           </Form.Item>
           <div className="bill-it">
-            <h5>Sub Total : ₹ {subTotal}</h5>
-            <h4 style={{ fontSize: 14 }}>
-              GST 18% : ₹ {((subTotal / 100) * 18).toFixed(2)}
-            </h4>
+            <h5>Sub Total : ₹ {sellingPrice}</h5>
+            <h4 style={{ fontSize: 14 }}>GST 18% : ₹ {gstAmount}</h4>
             <h4>
-              Grand total :{" "}
-              <b>₹ {(subTotal + (subTotal / 100) * 18).toFixed(2)}</b>
+              Grand total : <b>₹ {grandTotal}</b>
             </h4>
           </div>
           <div className="d-flex justify-content-end">
