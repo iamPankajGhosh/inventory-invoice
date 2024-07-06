@@ -213,3 +213,19 @@ body {
   border: none;
   outline: none;
 }
+
+.previous-stock-btn{
+  border: none;
+  height: 35px;
+  border-radius: 6px;
+  margin-top: -10px;
+  font-size: 16px;
+  background-color: #1e293b;
+  color: #cbd5e1;
+  transition: 200ms ease-in-out;
+}
+
+.previous-stock-btn:is(:hover,:focus){
+  background-color: #589eff;
+  color: #020617;
+}

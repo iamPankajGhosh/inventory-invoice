@@ -138,10 +138,22 @@ const ItemPage = () => {
     }
   };
 
+  //handle previous stock
+  const handlePreviousStock = () => {
+    const fillteredData = itemsData.filter((item) => item.quantity === 0);
+    setItemsData(fillteredData);
+  };
+
   return (
     <DefaultLayout>
       <div className="d-flex justify-content-between">
-        <h1>Item List</h1>
+        <div className="d-flex gap-4 align-items-center">
+          <h1>Item List</h1>
+          <button className="previous-stock-btn" onClick={handlePreviousStock}>
+            <span></span>
+            <span>Previous stock</span>
+          </button>
+        </div>
         <Button
           type="primary"
           style={{ borderRadius: 8, marginBottom: 15 }}

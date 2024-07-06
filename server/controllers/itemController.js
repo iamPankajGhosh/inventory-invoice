@@ -44,8 +44,9 @@ const addItemController = async (req, res) => {
     //update expenses
     findExpensesByMonthAndYear.expenses += newItem.price * newItem.quantity;
     //update profit
-    findExpensesByMonthAndYear.profit =
-      findExpensesByMonthAndYear.revenue - findExpensesByMonthAndYear.expenses;
+    findExpensesByMonthAndYear.profit = (
+      findExpensesByMonthAndYear.revenue - findExpensesByMonthAndYear.expenses
+    ).toFixed(2);
 
     await findExpensesByMonthAndYear.save();
 
@@ -87,8 +88,9 @@ const editItemController = async (req, res) => {
     findExpensesByMonthAndYear.expenses +=
       updatedStockItem.price * updatedStockItem.quantity;
     //update profit
-    findExpensesByMonthAndYear.profit =
-      findExpensesByMonthAndYear.revenue - findExpensesByMonthAndYear.expenses;
+    findExpensesByMonthAndYear.profit = (
+      findExpensesByMonthAndYear.revenue - findExpensesByMonthAndYear.expenses
+    ).toFixed(2);
     await findExpensesByMonthAndYear.save();
 
     res.status(201).json("item Updated");
@@ -118,7 +120,8 @@ const deleteItemController = async (req, res) => {
       deletedItem.price * deletedItem.quantity;
     //update profit
     findExpensesByMonthAndYear.profit =
-      findExpensesByMonthAndYear.revenue - findExpensesByMonthAndYear.expenses;
+      findExpensesByMonthAndYear.revenue -
+      findExpensesByMonthAndYear.expenses.toFixed(2);
     await findExpensesByMonthAndYear.save();
     await itemModel.findOneAndDelete({ _id: itemId });
 

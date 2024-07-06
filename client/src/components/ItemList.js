@@ -18,40 +18,42 @@ const ItemList = ({ item }) => {
   const { Meta } = Card;
   return (
     <div>
-      <Card
-        style={{
-          width: 240,
-          margin: 15,
-          borderRadius: 8,
-          overflow: "hidden",
-          backgroundColor: "#0f172a",
-        }}
-        // cover={}
-      >
-        {/* <img
+      {item.quantity > 0 && (
+        <Card
+          style={{
+            width: 240,
+            margin: 15,
+            borderRadius: 8,
+            overflow: "hidden",
+            backgroundColor: "#0f172a",
+          }}
+          // cover={}
+        >
+          {/* <img
           alt={item.name}
           src={item.image}
           style={{ height: 200, width: "100%", objectFit: "cover" }}
         /> */}
-        <Meta title={item.name} />
-        <p style={{ fontSize: 14, marginTop: 10 }}>
-          <b>Serial No : </b> {item.serialNo}
-        </p>
-        <p style={{ fontSize: 14, marginTop: -8 }}>
-          <b>Cost : </b> ₹ {item.price}
-        </p>
-        <p style={{ fontSize: 14, marginTop: -8 }}>
-          <b>Stock count : </b> {item.quantity}
-        </p>
-        <div className="item-button">
-          <Button
-            onClick={() => handleAddTOCart(item._id)}
-            disabled={item.quantity > 0 ? false : true}
-          >
-            Add to cart
-          </Button>
-        </div>
-      </Card>
+          <Meta title={item.name} />
+          <p style={{ fontSize: 14, marginTop: 10 }}>
+            <b>Serial No : </b> {item.serialNo}
+          </p>
+          <p style={{ fontSize: 14, marginTop: -8 }}>
+            <b>Cost : </b> ₹ {item.price}
+          </p>
+          <p style={{ fontSize: 14, marginTop: -8 }}>
+            <b>Stock count : </b> {item.quantity}
+          </p>
+          <div className="item-button">
+            <Button
+              onClick={() => handleAddTOCart(item._id)}
+              disabled={item.quantity > 0 ? false : true}
+            >
+              Add to cart
+            </Button>
+          </div>
+        </Card>
+      )}
     </div>
   );
 };
