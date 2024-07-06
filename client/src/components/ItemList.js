@@ -1,10 +1,15 @@
-import React from "react";
-import { Button, Card } from "antd";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { Button, Card, message } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+
 const ItemList = ({ item }) => {
   const dispatch = useDispatch();
-  //update cart handler
-  const handleAddTOCart = () => {
+  const { billItems } = useSelector((state) => state.rootReducer);
+  const handleAddTOCart = (id) => {
+    const findItemById = billItems.filter((item) => item._id === id);
+    if (findItemById && findItemById.length > 0) {
+      return message.error("Item already added to cart");
+    }
     dispatch({
       type: "ADD_TO_CART",
       payload: { ...item, billQuantity: 1 },
@@ -40,8 +45,8 @@ const ItemList = ({ item }) => {
         </p>
         <div className="item-button">
           <Button
-            onClick={() => handleAddTOCart()}
-            disabled={item.quantity === 0}
+            onClick={() => handleAddTOCart(item._id)}
+            disabled={item.quantity > 0 ? false : true}
           >
             Add to cart
           </Button>
