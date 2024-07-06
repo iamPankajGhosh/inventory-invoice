@@ -3,35 +3,21 @@ import DefaultLayout from "./../components/DefaultLayout";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import ItemList from "../components/ItemList";
-import { SearchOutlined, PlusCircleFilled } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  PlusCircleFilled,
+  DeleteFilled,
+} from "@ant-design/icons";
 import { message } from "antd";
 const Homepage = () => {
   const [itemsData, setItemsData] = useState([]);
   const [selecedCategory, setSelecedCategory] = useState("All");
-  const categories = [
-    { name: "All" },
-    {
-      name: "Guitar",
-    },
-    {
-      name: "Flute",
-    },
-    {
-      name: "Drum",
-    },
-    {
-      name: "Violin",
-    },
-    {
-      name: "Saxophone",
-    },
-    {
-      name: "Piano",
-    },
-  ];
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [tempData, setTempData] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [openForm, setOpenForm] = useState(false);
+  const [categoryName, setCategoryName] = useState("");
 
   // handle search using serial no.
   const handleSearch = (value) => {
@@ -65,12 +51,71 @@ const Homepage = () => {
         console.log(error);
       }
     };
+
+    const getAllCategories = async () => {
+      try {
+        dispatch({
+          type: "SHOW_LOADING",
+        });
+        const { data } = await axios.get(
+          `${process.env.REACT_APP_SERVER_URL}/api/categories/get-category`
+        );
+        console.log(data);
+        setCategories(data);
+        dispatch({ type: "HIDE_LOADING" });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getAllItems();
+    getAllCategories();
   }, [dispatch]);
 
   const handleAddCategory = () => {
-    console.log("Add Category");
-    message.error("This feature is under development");
+    if (!categoryName) {
+      message.error("Please enter a category name.");
+      return;
+    }
+
+    // Check if the category already exists
+    if (categories.some((category) => category.name === categoryName)) {
+      message.error("Category already exists.");
+      return;
+    }
+
+    // Add the new category
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/api/categories/add-category`, {
+        name: categoryName,
+      })
+      .then((response) => {
+        console.log(response.data);
+        setCategories([...categories, response.data]);
+        setCategoryName("");
+        setOpenForm(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setCategories([...categories, { name: categoryName }]);
+    setCategoryName("");
+    setOpenForm(false);
+  };
+
+  const handleDeleteCategory = (id) => {
+    axios
+      .post(
+        `${process.env.REACT_APP_SERVER_URL}/api/categories/delete-category`,
+        { id }
+      )
+      .then((response) => {
+        console.log(response.data);
+        setCategories(categories.filter((category) => category._id !== id));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -78,12 +123,7 @@ const Homepage = () => {
       <div className="home-header">
         <h3 style={{ fontWeight: 600, fontSize: 20 }}>Items</h3>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <button className="add-category" onClick={() => handleAddCategory()}>
-            <span>
-              <PlusCircleFilled />
-            </span>
-            <p>Add Category</p>
-          </button>
+          {/* Search Bar */}
           <div className="searchbar">
             <input
               value={searchValue}
@@ -98,6 +138,45 @@ const Homepage = () => {
               <SearchOutlined />
             </button>
           </div>
+
+          {/* Add Category Button */}
+          <div className="position-relative">
+            <button
+              className="add-category"
+              onClick={() => setOpenForm(!openForm)}
+            >
+              <span>
+                <PlusCircleFilled />
+              </span>
+              <p>Add Category</p>
+            </button>
+
+            <form
+              className={`position-absolute category-form ${
+                openForm && "active"
+              }`}
+            >
+              <input
+                type="text"
+                value={categoryName}
+                onChange={(e) => setCategoryName(e.target.value)}
+                placeholder="Enter category name"
+              />
+              <button onClick={handleAddCategory}>Add</button>
+
+              <div className="category-list mt-3">
+                {categories.map((category) => (
+                  <div key={category.name} className="category-item mb-2">
+                    <p>{category.name}</p>
+                    <DeleteFilled
+                      className="delete-btn"
+                      onClick={() => handleDeleteCategory(category._id)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </form>
+          </div>
         </div>
       </div>
       <div className="d-flex mb-4">
@@ -107,15 +186,12 @@ const Homepage = () => {
             className={`d-flex category ${
               selecedCategory === category.name && "category-active"
             }`}
-            onClick={() => setSelecedCategory(category.name)}
+            onClick={() => {
+              setSelecedCategory(category.name);
+              console.log(selecedCategory);
+            }}
           >
-            <h4 className="text-white">{category.name}</h4>
-            {/* <img
-              src={category.imageUrl}
-              alt={category.name}
-              height="40"
-              width="60"
-            /> */}
+            <h4 className="text-white text-capitalize">{category.name}</h4>
           </div>
         ))}
       </div>

@@ -9,9 +9,8 @@ const ItemPage = () => {
   const [itemsData, setItemsData] = useState([]);
   const [popupModal, setPopupModal] = useState(false);
   const [editItem, setEditItem] = useState(null);
-  const notAllowed = () => {
-    message.error("This function is not allowed in demo mode");
-  };
+  const [categories, setCategories] = useState([]);
+
   const getAllItems = async () => {
     try {
       dispatch({
@@ -28,10 +27,26 @@ const ItemPage = () => {
       console.log(error);
     }
   };
+
+  const getAllCategories = async () => {
+    try {
+      dispatch({
+        type: "SHOW_LOADING",
+      });
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/api/categories/get-category`
+      );
+      console.log(data);
+      setCategories(data);
+      dispatch({ type: "HIDE_LOADING" });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   //useEffect
   useEffect(() => {
     getAllItems();
-    //eslint-disable-next-line
+    getAllCategories();
   }, []);
 
   //handle delete
@@ -189,12 +204,11 @@ const ItemPage = () => {
             </Form.Item>
             <Form.Item name="category" label="Category">
               <Select placeholder="Select category">
-                <Select.Option value="Guitar">Guitar</Select.Option>
-                <Select.Option value="Flute">Flute</Select.Option>
-                <Select.Option value="Drum">Drum</Select.Option>
-                <Select.Option value="Violin">Violin</Select.Option>
-                <Select.Option value="Saxophone">Saxophone</Select.Option>
-                <Select.Option value="Piano">Piano</Select.Option>
+                {categories.map((c) => (
+                  <Select.Option value={c.name} className="text-capitalize">
+                    {c.name}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
             <Form.Item name="price" label="Cost">

@@ -31,6 +31,7 @@ app.use("/api/items", require("./routes/itemRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/bills", require("./routes/billsRoute"));
 app.use("/api/profit-reports", require("./routes/profitReports"));
+app.use("/api/categories", require("./routes/categoryRoute"));
 
 //port
 const PORT = process.env.PORT || 8080;

@@ -229,3 +229,70 @@ body {
   background-color: #589eff;
   color: #020617;
 }
+
+.category-form{
+  top: 100%;
+  right: 0;
+  width: 200px;
+  background-color: #1e293b;
+  margin-top: 0;
+  padding: 10px;
+  border-radius: 8px;
+  opacity: 0;
+  transition: 100ms ease-in-out;
+}
+
+.category-form.active{
+  opacity: 1;
+  margin-top: 10px;
+}
+
+.category-form input,
+.category-form button {
+  border: none;
+  border-radius: 6px;
+  width: 100%;
+}
+.category-form input:is(:hover,:focus) {
+  outline: none;
+}
+
+.category-form input {
+  background-color: #cbd5e1;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.category-form button {
+  background-color: #2f81f7;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  transition: 100ms ease-in-out;
+  font-weight: 600;
+}
+
+.category-form button:is(:hover,:focus) {
+  background-color:#589eff;
+}
+
+.category-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #334155;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.category-item p {
+  font-size: 16px;
+  text-transform: capitalize;
+  color: #cbd5e1;
+  margin: 0;
+  margin-left: 6px;
+}
+
+.delete-btn{
+  margin-right: 10px;
+  margin-block: 6px;
+}
