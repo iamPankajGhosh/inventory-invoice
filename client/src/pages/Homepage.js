@@ -7,8 +7,9 @@ import { SearchOutlined, PlusCircleFilled } from "@ant-design/icons";
 import { message } from "antd";
 const Homepage = () => {
   const [itemsData, setItemsData] = useState([]);
-  const [selecedCategory, setSelecedCategory] = useState("Guitar");
+  const [selecedCategory, setSelecedCategory] = useState("All");
   const categories = [
+    { name: "All" },
     {
       name: "Guitar",
     },
@@ -34,7 +35,6 @@ const Homepage = () => {
 
   // handle search using serial no.
   const handleSearch = (value) => {
-    console.log(value);
     const filteredItems = tempData.filter((item) =>
       item.serialNo.toLowerCase().includes(value.toLowerCase())
     );
@@ -42,6 +42,7 @@ const Homepage = () => {
     if (filteredItems.length > 0) {
       setItemsData(filteredItems);
     } else {
+      message.error("No items found for the given serial number.");
       setItemsData(tempData);
     }
   };
@@ -119,11 +120,18 @@ const Homepage = () => {
         ))}
       </div>
       <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {itemsData
-          .filter((i) => i.category === selecedCategory)
-          .map((item) => (
-            <ItemList key={item.id} item={item} />
-          ))}
+        {
+          // itemsData.length > 0 &&
+          itemsData
+            .filter((item) =>
+              selecedCategory === "All"
+                ? true
+                : item.category === selecedCategory
+            )
+            .map((item) => (
+              <ItemList key={item._id} item={item} />
+            ))
+        }
       </div>
     </DefaultLayout>
   );
