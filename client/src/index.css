@@ -296,3 +296,9 @@ body {
   margin-right: 10px;
   margin-block: 6px;
 }
+
+.category-count{
+  font-weight: 600;
+  margin-left: 3px;
+  color: #cbd5e1;
+}

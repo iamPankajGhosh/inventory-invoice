@@ -192,6 +192,12 @@ const Homepage = () => {
             }}
           >
             <h4 className="text-white text-capitalize">{category.name}</h4>
+            <p className="category-count">
+              {
+                itemsData.filter((item) => item.category === category.name)
+                  .length
+              }
+            </p>
           </div>
         ))}
       </div>
