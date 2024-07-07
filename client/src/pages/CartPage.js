@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  EditOutlined,
   DeleteOutlined,
   PlusCircleOutlined,
   MinusCircleOutlined,
@@ -14,6 +15,8 @@ const CartPage = () => {
   const [subTotal, setSubTotal] = useState(0);
   const [billPopup, setBillPopup] = useState(false);
   const [sellingPrice, setSellingPrice] = useState(0);
+  const [popupModal, setPopupModal] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { billItems } = useSelector((state) => state.rootReducer);
@@ -34,6 +37,7 @@ const CartPage = () => {
       });
     console.log(record);
   };
+
   const handleDecreament = (record) => {
     if (record.billQuantity !== 1)
       dispatch({
@@ -45,6 +49,24 @@ const CartPage = () => {
         },
       });
   };
+
+  //handle price edit
+  const handlePriceEdit = (value) => {
+    setSelectedValue(value);
+    setSellingPrice(value.price);
+    setPopupModal(true);
+  };
+
+  const handleUpdatePrice = () => {
+    billItems.forEach((item) => {
+      if (item._id === selectedValue._id) {
+        item.price = sellingPrice;
+      }
+    });
+    console.log(billItems);
+    setPopupModal(false);
+  };
+
   const columns = [
     { title: "Name", dataIndex: "name" },
     // {
@@ -92,16 +114,22 @@ const CartPage = () => {
       title: "Actions",
       dataIndex: "_id",
       render: (id, record) => (
-        <DeleteOutlined
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            setSellingPrice(0);
-            dispatch({
-              type: "DELETE_FROM_CART",
-              payload: record,
-            });
-          }}
-        />
+        <div>
+          <EditOutlined
+            style={{ cursor: "pointer" }}
+            onClick={() => handlePriceEdit(record)}
+          />
+          <DeleteOutlined
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setSellingPrice(0);
+              dispatch({
+                type: "DELETE_FROM_CART",
+                payload: record,
+              });
+            }}
+          />
+        </div>
       ),
     },
   ];
@@ -153,20 +181,25 @@ const CartPage = () => {
     <DefaultLayout>
       <h1>Invoice</h1>
       <Table columns={columns} dataSource={billItems} bordered />
+      {/* popup modal */}
+      {popupModal && (
+        <div className="overlay" onClick={() => setPopupModal(false)} />
+      )}
+      <div className={`selling-price ${popupModal && "active"}`}>
+        <h3 style={{ margin: 0 }}>Selling Price : </h3>
+        <input
+          placeholder="Price"
+          value={sellingPrice}
+          onChange={(e) => setSellingPrice(e.target.value)}
+          className="price-input"
+        />
+        <button onClick={() => handleUpdatePrice()}>Update</button>
+      </div>
       <div className="d-flex flex-column align-items-end">
         <hr />
         <h3>
           Sub Total : ₹ <b> {subTotal}</b> /-{" "}
         </h3>
-        <div className="selling-price">
-          <h3 style={{ margin: 0 }}>Selling Price : ₹</h3>
-          <input
-            placeholder="Price"
-            value={sellingPrice}
-            onChange={(e) => setSellingPrice(e.target.value)}
-            className="price-input"
-          />
-        </div>
         <Button type="primary" onClick={() => setBillPopup(true)}>
           Create Invoice
         </Button>
