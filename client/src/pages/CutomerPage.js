@@ -32,7 +32,10 @@ const CutomerPage = () => {
     { title: "ID ", dataIndex: "_id" },
     {
       title: "Cutomer Name",
-      dataIndex: "customerName",
+      dataIndex: "_id",
+      render: (id, record) => (
+        <b className="text-capitalize">{record.customerName}</b>
+      ),
     },
     { title: "Contact No", dataIndex: "customerNumber" },
   ];
