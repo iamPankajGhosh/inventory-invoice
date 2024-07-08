@@ -39,10 +39,10 @@ const ItemList = ({ item }) => {
             <b>Serial No : </b> {item.serialNo}
           </p>
           <p style={{ fontSize: 14, marginTop: -8 }}>
-            <b>Cost : </b> ₹ {item.price}
+            <b>Cost : </b> ₹ {item.sellingPrice}
           </p>
           <p style={{ fontSize: 14, marginTop: -8 }}>
-            <b>Stock count : </b> {item.quantity}
+            <b>In stock : </b> {item.quantity}
           </p>
           <div className="item-button">
             <Button

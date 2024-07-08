@@ -14,6 +14,10 @@ const itemSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    sellingPrice: {
+      type: Number,
+      required: true,
+    },
     quantity: {
       type: Number,
       required: true,

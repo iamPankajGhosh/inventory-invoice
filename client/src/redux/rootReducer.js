@@ -29,6 +29,7 @@ export const rootReducer = (state = intialState, action) => {
                 ...item,
                 billQuantity: action.payload.billQuantity,
                 quantity: action.payload.quantity,
+                sellingPrice: action.payload.sellingPrice,
               }
             : item
         ),

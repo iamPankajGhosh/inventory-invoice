@@ -10,19 +10,15 @@ import {
   MinusCircleOutlined,
 } from "@ant-design/icons";
 import { Table, Button, Modal, message, Form, Input, Select } from "antd";
-import { render } from "react-dom";
+
 const CartPage = () => {
   const [subTotal, setSubTotal] = useState(0);
   const [billPopup, setBillPopup] = useState(false);
-  const [sellingPrice, setSellingPrice] = useState(0);
   const [popupModal, setPopupModal] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { billItems } = useSelector((state) => state.rootReducer);
-
-  let gstAmount = ((sellingPrice / 100) * 18).toFixed(2);
-  let grandTotal = (Number(sellingPrice) + Number(gstAmount)).toFixed(2);
 
   //handle increament
   const handleIncreament = (record) => {
@@ -52,32 +48,28 @@ const CartPage = () => {
 
   //handle price edit
   const handlePriceEdit = (value) => {
+    console.log(value);
+    console.log(billItems);
     setSelectedValue(value);
-    setSellingPrice(value.price);
     setPopupModal(true);
   };
 
   const handleUpdatePrice = () => {
-    billItems.forEach((item) => {
-      if (item._id === selectedValue._id) {
-        item.price = sellingPrice;
-      }
+    dispatch({
+      type: "UPDATE_CART",
+      payload: {
+        ...selectedValue,
+        sellingPrice: selectedValue.sellingPrice,
+      },
     });
-    console.log(billItems);
     setPopupModal(false);
+    message.success("Price Updated Successfully");
   };
 
   const columns = [
     { title: "Name", dataIndex: "name" },
-    // {
-    //   title: "Image",
-    //   dataIndex: "image",
-    //   render: (image, record) => (
-    //     <img src={image} alt={record.name} height="60" width="60" />
-    //   ),
-    // },
     {
-      title: "Stock",
+      title: "In Stock",
       dataIndex: "_id",
       render: (id, record) => (
         <div>
@@ -107,22 +99,26 @@ const CartPage = () => {
       ),
     },
     {
-      title: "Price",
-      dataIndex: "price",
+      title: "Price (Rs.)",
+      dataIndex: "_id",
+      render: (id, record) => (
+        <div className="d-flex justify-content-between">
+          <b>{record.sellingPrice}</b>
+          <EditOutlined
+            style={{ cursor: "pointer" }}
+            onClick={() => handlePriceEdit(record)}
+          />
+        </div>
+      ),
     },
     {
       title: "Actions",
       dataIndex: "_id",
       render: (id, record) => (
         <div>
-          <EditOutlined
-            style={{ cursor: "pointer" }}
-            onClick={() => handlePriceEdit(record)}
-          />
           <DeleteOutlined
             style={{ cursor: "pointer" }}
             onClick={() => {
-              setSellingPrice(0);
               dispatch({
                 type: "DELETE_FROM_CART",
                 payload: record,
@@ -137,16 +133,15 @@ const CartPage = () => {
   useEffect(() => {
     let subTotalCalc = 0;
     billItems.forEach((item) => {
-      subTotalCalc += item.billQuantity * item.price;
+      subTotalCalc += item.billQuantity * item.sellingPrice;
     });
     setSubTotal(subTotalCalc);
-  }, [billItems, sellingPrice]);
+  }, [billItems]);
 
   //handleSubmit
   const handleSubmit = async (value) => {
     try {
       if (
-        sellingPrice === 0 ||
         [value.customerName, value.customerNumber].some(
           (item) => item.trim() === ""
         )
@@ -158,8 +153,12 @@ const CartPage = () => {
         ...value,
         billItems,
         subTotal,
-        tax: gstAmount,
-        totalAmount: grandTotal,
+        tax: subTotal === 0 ? 0 : parseFloat(((subTotal / 100) * 5).toFixed(2)),
+
+        totalAmount:
+          subTotal === 0
+            ? 0
+            : parseFloat((subTotal + (subTotal / 100) * 5).toFixed(2)),
         userId: JSON.parse(localStorage.getItem("auth"))._id,
       };
 
@@ -189,16 +188,27 @@ const CartPage = () => {
         <h3 style={{ margin: 0 }}>Selling Price : </h3>
         <input
           placeholder="Price"
-          value={sellingPrice}
-          onChange={(e) => setSellingPrice(e.target.value)}
+          value={selectedValue?.sellingPrice}
+          onChange={(e) =>
+            setSelectedValue({
+              ...selectedValue,
+              sellingPrice: Number(e.target.value),
+            })
+          }
           className="price-input"
         />
-        <button onClick={() => handleUpdatePrice()}>Update</button>
+        <button
+          onClick={() => {
+            handleUpdatePrice();
+          }}
+        >
+          Update
+        </button>
       </div>
       <div className="d-flex flex-column align-items-end">
         <hr />
         <h3>
-          Sub Total : ₹ <b> {subTotal}</b> /-{" "}
+          Sub Total : ₹ <b>{subTotal}</b> /-{" "}
         </h3>
         <Button type="primary" onClick={() => setBillPopup(true)}>
           Create Invoice
@@ -211,6 +221,9 @@ const CartPage = () => {
         footer={false}
       >
         <Form layout="vertical" onFinish={handleSubmit}>
+          <Form.Item name="invoiceNumber" label="Invoice Number">
+            <Input />
+          </Form.Item>
           <Form.Item name="customerName" label="Customer Name">
             <Input />
           </Form.Item>
@@ -225,10 +238,12 @@ const CartPage = () => {
             </Select>
           </Form.Item>
           <div className="bill-it">
-            <h5>Sub Total : ₹ {sellingPrice}</h5>
-            <h4 style={{ fontSize: 14 }}>GST 18% : ₹ {gstAmount}</h4>
+            <h5>Sub Total : ₹ {subTotal}</h5>
+            <h4 style={{ fontSize: 14 }}>
+              GST 18% : ₹ {(subTotal * 18) / 100}
+            </h4>
             <h4>
-              Grand total : <b>₹ {grandTotal}</b>
+              Grand total : <b>₹ {subTotal + (subTotal * 18) / 100}</b>
             </h4>
           </div>
           <div className="d-flex justify-content-end">

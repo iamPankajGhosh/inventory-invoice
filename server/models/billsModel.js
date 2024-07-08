@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const billSchema = mongoose.Schema(
   {
+    invoiceNumber: {
+      type: String,
+      required: true,
+    },
     customerName: {
       type: String,
       required: true,

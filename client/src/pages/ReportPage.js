@@ -29,7 +29,13 @@ const ReportPage = () => {
   }, []);
 
   const columns = [
-    { title: "Month", dataIndex: "month" },
+    {
+      title: "Month",
+      dataIndex: "_id",
+      render: (id, record) => (
+        <div className="text-capitalize">{record.month}</div>
+      ),
+    },
     { title: "Year", dataIndex: "year" },
     {
       title: "Expenses",
@@ -45,7 +51,9 @@ const ReportPage = () => {
 
   return (
     <DefaultLayout>
-      <h1>Cutomer Page</h1>
+      <div className="report-header">
+        <h1>Reports</h1>
+      </div>
       <Table
         columns={columns}
         dataSource={reportData}

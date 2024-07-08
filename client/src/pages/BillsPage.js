@@ -66,7 +66,7 @@ const BillsPage = () => {
 
   //able data
   const columns = [
-    { title: "Invoice Id", dataIndex: "_id" },
+    { title: "Invoice Number", dataIndex: "invoiceNumber" },
     {
       title: "Date",
       dataIndex: "_id",
@@ -144,6 +144,8 @@ const BillsPage = () => {
             <div id="mid">
               <div className="mt-2">
                 <p>
+                  Invoice Number : <b>{selectedBill.invoiceNumber}</b>
+                  <br />
                   Customer Name : <b>{selectedBill.customerName}</b>
                   <br />
                   Phone No : <b>{selectedBill.customerNumber}</b>

@@ -10,7 +10,9 @@ const addBillsController = async (req, res) => {
 
     const timestamp = newBill.createdAt;
     const date = new Date(timestamp);
-    const billMonth = date.toLocaleString("default", { month: "long" });
+    const billMonth = date
+      .toLocaleString("default", { month: "long" })
+      .toLowerCase();
     const billYear = date.getFullYear();
 
     // update quantity in items

@@ -210,7 +210,10 @@ const ItemPage = () => {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item name="price" label="Cost">
+            <Form.Item name="price" label="Cost Price">
+              <Input placeholder="Item cost" style={{ borderRadius: 5 }} />
+            </Form.Item>
+            <Form.Item name="sellingPrice" label="Sell Price">
               <Input placeholder="Item cost" style={{ borderRadius: 5 }} />
             </Form.Item>
             <Form.Item name="quantity" label="Quantity">
