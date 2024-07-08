@@ -39,7 +39,7 @@ const CutomerPage = () => {
 
   return (
     <DefaultLayout>
-      <h1>Cutomer Page</h1>
+      <h1>Cutomers</h1>
       <Table
         columns={columns}
         dataSource={billsData}
