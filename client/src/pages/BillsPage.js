@@ -1,19 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useDispatch } from "react-redux";
-import { EyeOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EyeOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 // import ReactToPrint from "react-to-print";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import { Modal, Button, Table, message } from "antd";
 import "../styles/InvoiceStyles.css";
-import { render } from "react-dom";
+
 const BillsPage = () => {
   const componentRef = useRef();
   const dispatch = useDispatch();
   const [billsData, setBillsData] = useState([]);
   const [popupModal, setPopupModal] = useState(false);
   const [selectedBill, setSelectedBill] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
+  const [tempData, setTempData] = useState([]);
+
   const getAllBills = async () => {
     try {
       dispatch({
@@ -28,6 +31,19 @@ const BillsPage = () => {
     } catch (error) {
       dispatch({ type: "HIDE_LOADING" });
       console.log(error);
+    }
+  };
+
+  const handleSearch = (value) => {
+    const filteredItems = tempData.filter((item) =>
+      item.invoiceNumber.toLowerCase().includes(value.toLowerCase())
+    );
+
+    if (filteredItems.length > 0) {
+      setBillsData(filteredItems);
+    } else {
+      message.error("No items found for the given invoice number.");
+      setBillsData(tempData);
     }
   };
 
@@ -57,7 +73,7 @@ const BillsPage = () => {
   //useEffect
   useEffect(() => {
     getAllBills();
-    //eslint-disable-next-line
+    setTempData(billsData);
   }, []);
   //print function
   const handlePrint = useReactToPrint({
@@ -79,9 +95,9 @@ const BillsPage = () => {
       dataIndex: "customerName",
     },
     { title: "Contact No", dataIndex: "customerNumber" },
-    { title: "Subtotal", dataIndex: "subTotal" },
-    { title: "Tax", dataIndex: "tax" },
-    { title: "Total Amount", dataIndex: "totalAmount" },
+    { title: "Subtotal (Rs.)", dataIndex: "subTotal" },
+    { title: "Tax (Rs.)", dataIndex: "tax" },
+    { title: "Total Amount (Rs.)", dataIndex: "totalAmount" },
 
     {
       title: "Actions",
@@ -110,8 +126,35 @@ const BillsPage = () => {
   // console.log(selectedBill);
   return (
     <DefaultLayout>
-      <div className="d-flex color-white justify-content-between">
-        <h1>Invoice list</h1>
+      <div className="d-flex color-white justify-content-between mb-4">
+        <div className="d-flex gap-4 align-items-center">
+          <h1>Invoice List</h1>
+          <button
+            className="previous-stock-btn"
+            onClick={() => {
+              setSearchValue("");
+              setBillsData(tempData);
+            }}
+          >
+            <span>All Invoice</span>
+          </button>
+        </div>
+
+        {/* Search Bar */}
+        <div className="searchbar">
+          <input
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value.trim())}
+            placeholder="Invoice no."
+            className="search-field"
+          />
+          <button
+            className="search-icon"
+            onClick={() => handleSearch(searchValue)}
+          >
+            <SearchOutlined />
+          </button>
+        </div>
       </div>
 
       <Table columns={columns} dataSource={billsData} bordered />

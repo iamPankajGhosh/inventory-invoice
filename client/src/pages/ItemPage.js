@@ -164,7 +164,6 @@ const ItemPage = () => {
             className="previous-stock-btn"
             onClick={() => navigate("/items/previous-stock")}
           >
-            <span></span>
             <span>Previous stock</span>
           </button>
         </div>
