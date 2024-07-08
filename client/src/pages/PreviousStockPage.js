@@ -5,7 +5,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { Modal, Button, Table, Form, Input, Select, message } from "antd";
 import { useNavigate } from "react-router-dom";
-const ItemPage = () => {
+const PreviousStockPage = () => {
   const dispatch = useDispatch();
   const [itemsData, setItemsData] = useState([]);
   const [popupModal, setPopupModal] = useState(false);
@@ -21,7 +21,7 @@ const ItemPage = () => {
       const { data } = await axios.get(
         `${process.env.REACT_APP_SERVER_URL}/api/items/get-item`
       );
-      setItemsData(data.filter((item) => item.quantity !== 0));
+      setItemsData(data.filter((item) => item.quantity === 0));
       dispatch({ type: "HIDE_LOADING" });
       console.log(data);
     } catch (error) {
@@ -162,10 +162,10 @@ const ItemPage = () => {
           <h1>Item List</h1>
           <button
             className="previous-stock-btn"
-            onClick={() => navigate("/items/previous-stock")}
+            onClick={() => navigate("/items")}
           >
             <span></span>
-            <span>Previous stock</span>
+            <span>Current stock</span>
           </button>
         </div>
         <Button
@@ -232,4 +232,4 @@ const ItemPage = () => {
   );
 };
 
-export default ItemPage;
+export default PreviousStockPage;

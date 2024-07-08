@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import BillsPage from "./pages/BillsPage";
 import CutomerPage from "./pages/CutomerPage";
 import ReportPage from "./pages/ReportPage";
+import PreviousStockPage from "./pages/PreviousStockPage";
 
 function App() {
   return (
@@ -27,6 +28,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <ItemPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/items/previous-stock"
+            element={
+              <ProtectedRoute>
+                <PreviousStockPage />
               </ProtectedRoute>
             }
           />
