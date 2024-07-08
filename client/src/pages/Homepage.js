@@ -11,7 +11,7 @@ import {
 import { message } from "antd";
 const Homepage = () => {
   const [itemsData, setItemsData] = useState([]);
-  const [selecedCategory, setSelecedCategory] = useState("All");
+  const [selecedCategory, setSelecedCategory] = useState("all");
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [tempData, setTempData] = useState(null);
@@ -60,7 +60,6 @@ const Homepage = () => {
         const { data } = await axios.get(
           `${process.env.REACT_APP_SERVER_URL}/api/categories/get-category`
         );
-        console.log(data);
         setCategories(data);
         dispatch({ type: "HIDE_LOADING" });
       } catch (error) {
@@ -180,6 +179,18 @@ const Homepage = () => {
         </div>
       </div>
       <div className="d-flex mb-4">
+        <div
+          key="all"
+          className={`d-flex category ${
+            selecedCategory === "all" && "category-active"
+          }`}
+          onClick={() => {
+            setSelecedCategory("all");
+          }}
+        >
+          <h4 className="text-white text-capitalize">all</h4>
+          <p className="category-count">{itemsData.length}</p>
+        </div>
         {categories.map((category) => (
           <div
             key={category.name}
@@ -206,7 +217,7 @@ const Homepage = () => {
           // itemsData.length > 0 &&
           itemsData
             .filter((item) =>
-              selecedCategory === "All"
+              selecedCategory === "all"
                 ? true
                 : item.category === selecedCategory
             )
