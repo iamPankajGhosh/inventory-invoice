@@ -26,6 +26,7 @@ const BillsPage = () => {
         `${process.env.REACT_APP_SERVER_URL}/api/bills/get-bills`
       );
       setBillsData(data);
+      setTempData(data);
       dispatch({ type: "HIDE_LOADING" });
       console.log(data);
     } catch (error) {
@@ -73,7 +74,6 @@ const BillsPage = () => {
   //useEffect
   useEffect(() => {
     getAllBills();
-    setTempData(billsData);
   }, []);
   //print function
   const handlePrint = useReactToPrint({
