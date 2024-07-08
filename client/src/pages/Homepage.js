@@ -14,7 +14,7 @@ const Homepage = () => {
   const [selecedCategory, setSelecedCategory] = useState("all");
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
-  const [tempData, setTempData] = useState(null);
+  const [tempData, setTempData] = useState([]);
   const [categories, setCategories] = useState([]);
   const [openForm, setOpenForm] = useState(false);
   const [categoryName, setCategoryName] = useState("");
@@ -189,7 +189,7 @@ const Homepage = () => {
           }}
         >
           <h4 className="text-white text-capitalize">all</h4>
-          <p className="category-count">{itemsData.length}</p>
+          <p className="category-count">{tempData.length}</p>
         </div>
         {categories.map((category) => (
           <div
@@ -205,7 +205,7 @@ const Homepage = () => {
             <h4 className="text-white text-capitalize">{category.name}</h4>
             <p className="category-count">
               {
-                itemsData.filter((item) => item.category === category.name)
+                tempData.filter((item) => item.category === category.name)
                   .length
               }
             </p>
