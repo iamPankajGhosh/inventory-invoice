@@ -16,9 +16,27 @@ const CartPage = () => {
   const [billPopup, setBillPopup] = useState(false);
   const [popupModal, setPopupModal] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
+  const [billNumber, setBillNumber] = useState("");
+  const [prevBills, setPrevBills] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { billItems } = useSelector((state) => state.rootReducer);
+
+  //auto generate bill number
+  const generateBillNumber = () => {
+    console.log(billItems);
+    const year = new Date().getFullYear();
+    if (prevBills.length === 0) {
+      const newBillNumber = `MMC/${year}/1`;
+      setBillNumber(newBillNumber.toString());
+    }
+    const newBillNumber = `MMC/${year}/${
+      Number(
+        prevBills?.invoiceNumber.substring(9, prevBills?.invoiceNumber.length)
+      ) + 1
+    }`;
+    setBillNumber(newBillNumber.toString());
+  };
 
   //handle increament
   const handleIncreament = (record) => {
@@ -130,13 +148,22 @@ const CartPage = () => {
     },
   ];
 
+  const getAllPrevBills = async () => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/api/bills/get-last-bill`
+    );
+    setPrevBills(res.data);
+  };
+
   useEffect(() => {
     let subTotalCalc = 0;
     billItems.forEach((item) => {
       subTotalCalc += item.billQuantity * item.sellingPrice;
     });
     setSubTotal(subTotalCalc);
-  }, [billItems]);
+
+    getAllPrevBills();
+  }, [billItems, billNumber]);
 
   //handleSubmit
   const handleSubmit = async (value) => {
@@ -151,6 +178,7 @@ const CartPage = () => {
 
       const newObject = {
         ...value,
+        invoiceNumber: billNumber,
         billItems,
         subTotal,
         tax:
@@ -211,7 +239,14 @@ const CartPage = () => {
         <h3>
           Sub Total : ₹ <b>{subTotal}</b> /-{" "}
         </h3>
-        <Button type="primary" onClick={() => setBillPopup(true)}>
+        <Button
+          type="primary"
+          onClick={() => {
+            console.log(prevBills);
+            generateBillNumber();
+            setBillPopup(true);
+          }}
+        >
           Create Invoice
         </Button>
       </div>
@@ -223,7 +258,13 @@ const CartPage = () => {
       >
         <Form layout="vertical" onFinish={handleSubmit}>
           <Form.Item name="invoiceNumber" label="Invoice Number">
-            <Input />
+            <Input
+              defaultValue={billNumber}
+              value={billNumber}
+              onChange={(e) => {
+                setBillNumber(e.target.value);
+              }}
+            />
           </Form.Item>
           <Form.Item name="customerName" label="Customer Name">
             <Input />

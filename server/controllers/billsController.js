@@ -63,6 +63,20 @@ const getBillsController = async (req, res) => {
   }
 };
 
+//get last bill
+const getLastBill = async (req, res) => {
+  try {
+    const bills = await billsModel.find();
+    bills.sort((a, b) => {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
+    res.send(bills[0]);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 //delete bill data
 const deleteBillsController = async (req, res) => {
   try {
@@ -77,4 +91,5 @@ module.exports = {
   addBillsController,
   getBillsController,
   deleteBillsController,
+  getLastBill,
 };

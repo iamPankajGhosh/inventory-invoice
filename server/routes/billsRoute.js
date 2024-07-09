@@ -3,6 +3,7 @@ const {
   addBillsController,
   getBillsController,
   deleteBillsController,
+  getLastBill,
 } = require("./../controllers/billsController");
 
 const router = express.Router();
@@ -15,5 +16,6 @@ router.post("/delete-bills", deleteBillsController);
 
 //MEthod - GET
 router.get("/get-bills", getBillsController);
+router.get("/get-last-bill", getLastBill);
 
 module.exports = router;
