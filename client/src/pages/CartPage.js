@@ -153,12 +153,13 @@ const CartPage = () => {
         ...value,
         billItems,
         subTotal,
-        tax: subTotal === 0 ? 0 : parseFloat(((subTotal / 100) * 5).toFixed(2)),
+        tax:
+          subTotal === 0 ? 0 : parseFloat(((subTotal / 100) * 18).toFixed(2)),
 
         totalAmount:
           subTotal === 0
             ? 0
-            : parseFloat((subTotal + (subTotal / 100) * 5).toFixed(2)),
+            : parseFloat((subTotal + (subTotal / 100) * 18).toFixed(2)),
         userId: JSON.parse(localStorage.getItem("auth"))._id,
       };
 
