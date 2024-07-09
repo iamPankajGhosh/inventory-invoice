@@ -43,7 +43,7 @@ const Homepage = () => {
         const { data } = await axios.get(
           `${process.env.REACT_APP_SERVER_URL}/api/items/get-item`
         );
-        setTempData(data);
+        setTempData(data.filter((item) => item.quantity !== 0));
         setItemsData(data);
         dispatch({ type: "HIDE_LOADING" });
         console.log(data);
