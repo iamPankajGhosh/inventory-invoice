@@ -53,6 +53,10 @@ const addBillsController = async (req, res) => {
 const getBillsController = async (req, res) => {
   try {
     const bills = await billsModel.find();
+    bills.sort((a, b) => {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
     res.send(bills);
   } catch (error) {
     console.log(error);
