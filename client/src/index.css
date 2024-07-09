@@ -339,3 +339,10 @@ body {
   margin-left: 3px;
   color: #cbd5e1;
 }
+
+.select-field{
+  width: 100px;
+  height: 35px;
+  margin-top: -10px;
+  border-radius: 6px;
+}

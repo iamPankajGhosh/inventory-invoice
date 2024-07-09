@@ -2,10 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useDispatch } from "react-redux";
 import { EyeOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons";
-// import ReactToPrint from "react-to-print";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
-import { Modal, Button, Table, message } from "antd";
+import { Modal, Button, Table, message, Select, Form } from "antd";
 import "../styles/InvoiceStyles.css";
 
 const BillsPage = () => {
@@ -16,6 +15,33 @@ const BillsPage = () => {
   const [selectedBill, setSelectedBill] = useState(null);
   const [searchValue, setSearchValue] = useState("");
   const [tempData, setTempData] = useState([]);
+  const [years, setYears] = useState([]);
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
+
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const getYears = () => {
+    const currentYear = new Date().getFullYear();
+    const yearsArray = [];
+    for (let i = currentYear; i <= currentYear + 16; i++) {
+      yearsArray.push(i);
+    }
+    setYears(yearsArray);
+  };
 
   const getAllBills = async () => {
     try {
@@ -71,9 +97,31 @@ const BillsPage = () => {
     }
   };
 
+  const handleFilter = () => {
+    if ([selectedMonth, selectedYear].some((item) => item === "")) {
+      return message.error("Please select both month and year");
+    }
+
+    const filterData = tempData.filter(
+      (item) =>
+        item.createdAt.toString().substring(0, 4) === selectedYear.toString() &&
+        item.createdAt
+          .toString()
+          .substring(5, 7)
+          .includes(selectedMonth.toString())
+    );
+
+    if (filterData.length === 0) {
+      return message.error("No data found for the given filter");
+    }
+
+    setBillsData(filterData);
+  };
+
   //useEffect
   useEffect(() => {
     getAllBills();
+    getYears();
   }, []);
   //print function
   const handlePrint = useReactToPrint({
@@ -92,11 +140,14 @@ const BillsPage = () => {
     },
     {
       title: "Cutomer Name",
-      dataIndex: "customerName",
+      dataIndex: "_id",
+      render: (id, record) => (
+        <div className="text-capitalize">{record.customerName}</div>
+      ),
     },
     { title: "Contact No", dataIndex: "customerNumber" },
     { title: "Subtotal (Rs.)", dataIndex: "subTotal" },
-    { title: "Tax (Rs.)", dataIndex: "tax" },
+    { title: "GST (Rs.)", dataIndex: "tax" },
     { title: "Total Amount (Rs.)", dataIndex: "totalAmount" },
 
     {
@@ -138,6 +189,44 @@ const BillsPage = () => {
           >
             <span>All Invoice</span>
           </button>
+
+          <Form
+            layout="vertical"
+            onFinish={handleFilter}
+            style={{
+              display: "flex",
+              gap: 10,
+            }}
+          >
+            <Form.Item name="category" style={{ margin: 0 }}>
+              <Select
+                placeholder={months[0]}
+                style={{ width: 150 }}
+                onChange={(value) => setSelectedMonth(value)}
+              >
+                {months.map((m, i) => (
+                  <Select.Option key={m} value={i + 1}>
+                    {m}
+                  </Select.Option>
+                ))}
+              </Select>
+              <span className="p-2 text-white">-</span>
+              <Select
+                placeholder={years[0]}
+                style={{ width: 100 }}
+                onChange={(value) => setSelectedYear(value)}
+              >
+                {years.map((y) => (
+                  <Select.Option key={y} value={y}>
+                    {y}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Button htmlType="submit" type="primary">
+              Filter
+            </Button>
+          </Form>
         </div>
 
         {/* Search Bar */}
@@ -228,11 +317,11 @@ const BillsPage = () => {
                             <p className="itemtext">{item.billQuantity}</p>
                           </td>
                           <td className="tableitem">
-                            <p className="itemtext">{item.price}</p>
+                            <p className="itemtext">{item.sellingPrice}</p>
                           </td>
                           <td className="tableitem">
                             <p className="itemtext">
-                              {item.billQuantity * item.price}
+                              {item.billQuantity * item.sellingPrice}
                             </p>
                           </td>
                         </tr>
@@ -270,7 +359,7 @@ const BillsPage = () => {
                   <strong>Thank you for your order!</strong> 18% GST application
                   on total amount.Please note that this is non refundable amount
                   for any assistance please write email
-                  <b> shop@example.com</b>
+                  <b> mallickmusical110@gmail.com</b>
                 </p>
               </div>
             </div>
