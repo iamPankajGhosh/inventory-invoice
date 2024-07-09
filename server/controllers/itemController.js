@@ -5,6 +5,9 @@ const itemModel = require("../models/itemModel");
 const getItemController = async (req, res) => {
   try {
     const items = await itemModel.find();
+    items.sort((a, b) => {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
     res.status(200).send(items);
   } catch (error) {
     console.log(error);
