@@ -21,21 +21,19 @@ const CartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { billItems } = useSelector((state) => state.rootReducer);
+  let year = new Date().getFullYear();
 
   //auto generate bill number
   const generateBillNumber = () => {
-    console.log(billItems);
-    const year = new Date().getFullYear();
     if (prevBills.length === 0) {
-      const newBillNumber = `MMC/${year}/1`;
-      setBillNumber(newBillNumber.toString());
+      setBillNumber(`MMC/${year}/1`);
+    } else {
+      let newBillNumber = prevBills?.invoiceNumber?.substring(
+        9,
+        prevBills?.invoiceNumber.length
+      );
+      setBillNumber(`MMC/${year}/${(Number(newBillNumber) + 1).toString()}`);
     }
-    const newBillNumber = `MMC/${year}/${
-      Number(
-        prevBills?.invoiceNumber.substring(9, prevBills?.invoiceNumber.length)
-      ) + 1
-    }`;
-    setBillNumber(newBillNumber.toString());
   };
 
   //handle increament
