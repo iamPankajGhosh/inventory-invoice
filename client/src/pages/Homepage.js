@@ -235,6 +235,7 @@ const Homepage = () => {
           }`}
           onClick={() => {
             setSelecedCategory("all");
+            setBrands(["all", ...new Set(tempData.map((item) => item.brand))]);
           }}
         >
           <h4 className="text-white text-capitalize">all</h4>
@@ -248,7 +249,14 @@ const Homepage = () => {
             }`}
             onClick={() => {
               setSelecedCategory(category.name);
-              console.log(selecedCategory);
+              setBrands([
+                "all",
+                ...new Set(
+                  tempData
+                    .filter((item) => item.category === category.name)
+                    .map((item) => item.brand)
+                ),
+              ]);
             }}
           >
             <h4 className="text-white text-capitalize">{category.name}</h4>
