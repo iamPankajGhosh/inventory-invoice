@@ -167,9 +167,10 @@ const Homepage = () => {
           >
             <Form.Item name="brand" style={{ margin: 0 }}>
               <Select
-                placeholder="Brand Name"
+                placeholder={brands ? brands[0] : "Brand Name"}
                 style={{ width: 150 }}
                 onChange={(value) => setSelectedBrand(value)}
+                className="text-capitalize"
               >
                 {brands.map((brand, index) => (
                   <Select.Option
