@@ -1,3 +1,7 @@
+html{
+  background-color: #020617;
+}
+
 body {
   font-family: sans-serif;
   background-color: #1e293b;
@@ -345,4 +349,148 @@ body {
   height: 35px;
   margin-top: -10px;
   border-radius: 6px;
+}
+
+.bill-popup{
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  min-height: 80vh;
+  padding: 10px;
+  background-color: #cbd5e1;
+  transform: translate(-50%,-50%);
+  visibility: hidden;
+  opacity: 0;
+  transition: 200ms ease-in-out;
+  z-index: 100 !important;
+}
+
+.bill-popup.active{
+  top: 70%;
+  opacity: 1;
+  visibility: visible;
+}
+
+.bill-popup button{
+  border: none;
+  background-color: #2f81f7;
+  height: 35px;
+  width: 100%;
+  border-radius: 5px;
+  padding-inline: 20px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.bill .content {
+  background-color: #ffffff;
+  min-width: 50vw;
+}
+
+.content-head-top{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2em;
+  font-size: 12px;
+  font-family: "Krungthep",sans-serif;
+}
+
+.content-head{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2em;
+  font-size: 12px;
+  font-family: "Krungthep",sans-serif;
+}
+
+.content-head .title {
+  color: #000000;
+  font-family: "Britannic Bold",sans-serif;
+  font-size: 40px;
+  margin: 0;
+}
+
+.content-head .sub-title {
+  font-size: 16px;
+  margin: 0;
+}
+.content-head .address {
+  font-size: 12px;
+  margin: 0;
+}
+.content-head .contact {
+  font-size: 9px;
+  margin: 0;
+  margin-top: 10px;
+}
+
+.content .customer-details{
+  margin-inline: 2em;
+}
+
+.content .customer-details p {
+  margin-bottom: 5px;
+  font-size: 10px;
+  font-family: "Krungthep",sans-serif;
+}
+
+.content .invoice-table {
+  margin-inline: 2em;
+  margin-block: 3em;
+}
+
+.content .invoice-table th,
+.content .invoice-table tr,
+.content .invoice-table td{
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.content .invoice-table th {
+  font-size: 10px;
+  font-family: "Krungthep",sans-serif;
+  background-color: #d2d2d2;
+}
+
+.content .invoice-table tr:nth-child(2n) {
+  background-color: #e8e8e8;
+}
+
+.content .total {
+  margin-inline: 2em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.content .total p{
+  font-size: 14px;
+  font-family: "Krungthep",sans-serif;
+}
+
+.content .logo {
+  margin-inline: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: center;
+}
+
+.content .logo p {
+  font-size: 12px;
+  font-family: "Krungthep",sans-serif;
+}
+
+.content .footer {
+  margin-inline: 2em;
+  text-align: center;
+  margin-block: 3em;
+  font-family: "Krungthep",sans-serif;
+}
+
+.content .terms {
+  margin-inline: 2em;
+  padding-bottom: 2em;
+  font-family: "Krungthep",sans-serif;
 }

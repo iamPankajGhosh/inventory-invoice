@@ -112,7 +112,7 @@ const DefaultLayout = ({ children }) => {
             onClick={() => navigate("/cart")}
           >
             <div style={{ position: "relative", display: "flex", gap: 10 }}>
-              <button className="invoice-btn">Invoice</button>
+              <button className="invoice-btn">Bill</button>
               {billItems.length > 0 && (
                 <p
                   style={{

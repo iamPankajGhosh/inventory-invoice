@@ -2,9 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useDispatch } from "react-redux";
 import { EyeOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons";
+import { toWords } from "number-to-words";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
-import { Modal, Button, Table, message, Select, Form } from "antd";
+import { Button, Table, message, Select, Form } from "antd";
+import BillLogo from "../assets/bill-logo.png";
 import "../styles/InvoiceStyles.css";
 
 const BillsPage = () => {
@@ -130,7 +132,7 @@ const BillsPage = () => {
 
   //able data
   const columns = [
-    { title: "Invoice Number", dataIndex: "invoiceNumber" },
+    { title: "Bill Number", dataIndex: "invoiceNumber" },
     {
       title: "Date",
       dataIndex: "_id",
@@ -146,8 +148,8 @@ const BillsPage = () => {
       ),
     },
     { title: "Contact No", dataIndex: "customerNumber" },
-    { title: "Subtotal (Rs.)", dataIndex: "subTotal" },
-    { title: "GST (Rs.)", dataIndex: "tax" },
+    // { title: "Subtotal (Rs.)", dataIndex: "subTotal" },
+    // { title: "GST (Rs.)", dataIndex: "tax" },
     { title: "Total Amount (Rs.)", dataIndex: "totalAmount" },
 
     {
@@ -179,7 +181,7 @@ const BillsPage = () => {
     <DefaultLayout>
       <div className="d-flex color-white justify-content-between mb-4">
         <div className="d-flex gap-4 align-items-center">
-          <h1>Invoice List</h1>
+          <h1>Bills</h1>
           <button
             className="previous-stock-btn"
             onClick={() => {
@@ -187,7 +189,7 @@ const BillsPage = () => {
               setBillsData(tempData);
             }}
           >
-            <span>All Invoice</span>
+            <span>All Bills</span>
           </button>
 
           <Form
@@ -234,7 +236,7 @@ const BillsPage = () => {
           <input
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value.trim())}
-            placeholder="Invoice no."
+            placeholder="Bill no."
             className="search-field"
           />
           <button
@@ -249,131 +251,118 @@ const BillsPage = () => {
       <Table columns={columns} dataSource={billsData} bordered />
 
       {popupModal && (
-        <Modal
-          width={400}
-          pagination={false}
-          title="Invoice Details"
-          visible={popupModal}
-          onCancel={() => {
-            setPopupModal(false);
-          }}
-          footer={false}
-        >
-          {/* ============ invoice modal start ==============  */}
-          <div id="invoice-POS" ref={componentRef}>
-            <center id="top">
-              <div className="info">
-                <h2>Mallick Musical Company</h2>
-                <p style={{ textAlign: "center" }}>
-                  {" "}
-                  38 Gariahat Road, Identity Apartment, Shop No :
-                  3 ,Kolkata 700031
-                </p>
-              </div>
-              {/*End Info*/}
-            </center>
-            {/*End InvoiceTop*/}
-            <div id="mid">
-              <div className="mt-2">
-                <p>
-                  Invoice Number : <b>{selectedBill.invoiceNumber}</b>
-                  <br />
-                  Customer Name : <b>{selectedBill.customerName}</b>
-                  <br />
-                  Phone No : <b>{selectedBill.customerNumber}</b>
-                  <br />
-                  Date : <b>{selectedBill.date.toString().substring(0, 10)}</b>
-                  <br />
-                </p>
-                <hr style={{ margin: "5px" }} />
-              </div>
-            </div>
-            {/*End Invoice Mid*/}
-            <div id="bot">
-              <div id="table">
-                <table>
-                  <tbody>
-                    <tr className="tabletitle">
-                      <td className="item">
-                        <h2>Item</h2>
-                      </td>
-                      <td className="Hours">
-                        <h2>Qty</h2>
-                      </td>
-                      <td className="Rate">
-                        <h2>Price</h2>
-                      </td>
-                      <td className="Rate">
-                        <h2>Total</h2>
-                      </td>
-                    </tr>
-                    {selectedBill.billItems.map((item) => (
-                      <>
-                        <tr className="service">
-                          <td className="tableitem">
-                            <p className="itemtext">{item.name}</p>
-                          </td>
-                          <td className="tableitem">
-                            <p className="itemtext">{item.billQuantity}</p>
-                          </td>
-                          <td className="tableitem">
-                            <p className="itemtext">{item.sellingPrice}</p>
-                          </td>
-                          <td className="tableitem">
-                            <p className="itemtext">
-                              {item.billQuantity * item.sellingPrice}
-                            </p>
-                          </td>
-                        </tr>
-                      </>
-                    ))}
-
-                    <tr className="tabletitle">
-                      <td />
-                      <td />
-                      <td className="Rate">
-                        <h2>GST</h2>
-                      </td>
-                      <td className="payment">
-                        <h2>Rs {selectedBill.tax}</h2>
-                      </td>
-                    </tr>
-                    <tr className="tabletitle">
-                      <td />
-                      <td />
-                      <td className="Rate">
-                        <h2>Grand Total</h2>
-                      </td>
-                      <td className="payment">
-                        <h2>
-                          <b>Rs {selectedBill.totalAmount}</b>
-                        </h2>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              {/*End Table*/}
-              <div id="legalcopy">
-                <p className="legal">
-                  <strong>Thank you for your order!</strong> 18% GST application
-                  on total amount.Please note that this is non refundable amount
-                  for any assistance please write email
-                  <b> mallickmusical110@gmail.com</b>
-                </p>
-              </div>
-            </div>
-            {/*End InvoiceBot*/}
-          </div>
-          {/*End Invoice*/}
-          <div className="d-flex justify-content-end mt-3">
-            <Button type="primary" onClick={handlePrint}>
-              Print
-            </Button>
-          </div>
-          {/* ============ invoice modal ends ==============  */}
-        </Modal>
+        <div className="overlay" onClick={() => setPopupModal(false)} />
       )}
+
+      <div className={`bill-popup ${popupModal && "active"}`}>
+        <div className="bill">
+          <h2>Bill Details</h2>
+          <div className="content" ref={componentRef}>
+            <div className="content-head-top">
+              <p>
+                <span style={{ color: "#000000", marginRight: "10px" }}>
+                  Bill No :{" "}
+                </span>
+                {selectedBill?.invoiceNumber}
+              </p>
+              <p>
+                <span style={{ color: "#000000", marginRight: "10px" }}>
+                  Data :{" "}
+                </span>
+                {selectedBill?.createdAt?.toString().substring(0, 10)}
+              </p>
+            </div>
+            <div className="content-head">
+              <h1 className="title">MALLICK MUSICAL CO.</h1>
+              <p className="sub-title">
+                Seller & Repairer of Musical Instruments
+              </p>
+              <p className="address">
+                38 Gariahat Road (S) Dhakuria Kolkata-700031
+              </p>
+              <p className="contact">
+                Call : 9874314690 | Email: mallickmusical110&gmail.com
+              </p>
+            </div>
+            <div className="customer-details">
+              <p>
+                <span style={{ color: "#000000", marginRight: "10px" }}>
+                  Customer Name :{" "}
+                </span>
+                {selectedBill?.customerName}
+              </p>
+              <p>
+                <span style={{ color: "#000000", marginRight: "10px" }}>
+                  Customer Number :{" "}
+                </span>
+                {selectedBill?.customerNumber}
+              </p>
+            </div>
+            <div className="invoice-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Serial No.</th>
+                    <th>Item Description</th>
+                    <th>Quantity</th>
+                    <th>Price (Rs.)</th>
+                    <th>Amount (Rs.)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedBill?.billItems?.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.serialNo}</td>
+                      <td style={{ textAlign: "left" }}>{item.name}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.sellingPrice}</td>
+                      <td>{item.quantity * item.sellingPrice}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="total">
+              <p className="text-capitalize">
+                <span style={{ color: "#000000", marginRight: "10px" }}>
+                  Rupees in Words :{" "}
+                </span>
+                <br />
+                {selectedBill &&
+                  toWords(selectedBill?.totalAmount.toFixed(2))}{" "}
+                Rupees Only
+              </p>
+              <p>
+                <span style={{ color: "#000000", marginRight: "10px" }}>
+                  Grand Total :
+                </span>
+                Rs. {selectedBill?.totalAmount.toFixed(2)}
+              </p>
+            </div>
+            <div className="logo">
+              <p>E.&O.E.</p>
+              <img src={BillLogo} height={40} alt="logo" />
+            </div>
+            <div className="footer">
+              <p>Thank you for your business!</p>
+            </div>
+            <div className="terms">
+              <p className="text-center">
+                Goods once sold cannot be taken back or exchanged. General Terms
+                as Usual.
+              </p>
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={() => {
+            console.log(selectedBill);
+            handlePrint();
+          }}
+        >
+          Print
+        </button>
+      </div>
     </DefaultLayout>
   );
 };
