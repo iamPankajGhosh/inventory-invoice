@@ -270,7 +270,7 @@ const Homepage = () => {
           </div>
         ))}
       </div>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
+      <div className="item-list-outer">
         {
           // itemsData.length > 0 &&
           itemsData
