@@ -168,13 +168,13 @@ const PreviousStockPage = () => {
             <span>Current stock</span>
           </button>
         </div>
-        <Button
+        {/* <Button
           type="primary"
           style={{ borderRadius: 8, marginBottom: 15 }}
           onClick={() => setPopupModal(true)}
         >
           Add Item
-        </Button>
+        </Button> */}
       </div>
 
       <Table columns={columns} dataSource={itemsData} bordered />
