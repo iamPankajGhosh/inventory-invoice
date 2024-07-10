@@ -228,7 +228,7 @@ const Homepage = () => {
           </div>
         </div>
       </div>
-      <div className="d-flex mb-4">
+      <div className="category-outer d-flex mb-4">
         <div
           key="all"
           className={`d-flex category ${

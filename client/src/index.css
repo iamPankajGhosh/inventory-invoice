@@ -353,6 +353,17 @@ body {
   border-radius: 6px;
 }
 
+.category-outer{
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.category-outer::-webkit-scrollbar{
+  display: none;
+}
+
 .bill-popup{
   position: absolute;
   top: 60%;
