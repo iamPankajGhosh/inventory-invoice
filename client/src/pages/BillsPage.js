@@ -21,6 +21,12 @@ const BillsPage = () => {
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
 
+  useEffect(() => {
+    if (searchValue === "") {
+      setBillsData(tempData);
+    }
+  });
+
   const months = [
     "January",
     "February",
