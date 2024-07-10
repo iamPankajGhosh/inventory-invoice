@@ -18,10 +18,17 @@ const Homepage = () => {
   const [categories, setCategories] = useState([]);
   const [openForm, setOpenForm] = useState(false);
   const [categoryName, setCategoryName] = useState("");
-  const [selecetedBrand, setSelectedBrand] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState("all");
   const [brands, setBrands] = useState([]);
 
-  const handleFilter = () => {};
+  const handleFilter = () => {
+    console.log(selectedBrand);
+    setItemsData(
+      tempData.filter((item) =>
+        selectedBrand === "all" ? true : item.brand === selectedBrand
+      )
+    );
+  };
 
   useEffect(() => {
     if (searchValue === "") {
@@ -55,6 +62,7 @@ const Homepage = () => {
         );
         setTempData(data.filter((item) => item.quantity !== 0));
         setItemsData(data);
+        setBrands(["all", ...new Set(data.map((item) => item.brand))]);
         dispatch({ type: "HIDE_LOADING" });
         console.log(data);
       } catch (error) {
@@ -159,7 +167,7 @@ const Homepage = () => {
           >
             <Form.Item name="brand" style={{ margin: 0 }}>
               <Select
-                placeholder={brands ? "Brand Name" : brands[0]}
+                placeholder="Brand Name"
                 style={{ width: 150 }}
                 onChange={(value) => setSelectedBrand(value)}
               >
