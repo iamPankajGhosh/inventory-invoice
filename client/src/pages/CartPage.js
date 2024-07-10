@@ -187,7 +187,8 @@ const CartPage = () => {
         totalAmount:
           subTotal === 0
             ? 0
-            : parseFloat((subTotal + (subTotal / 100) * 18).toFixed(2)),
+            : // : parseFloat((subTotal + (subTotal / 100) * 18).toFixed(2)),
+              parseFloat(subTotal.toFixed(2)),
         userId: JSON.parse(localStorage.getItem("auth"))._id,
       };
 
@@ -247,17 +248,17 @@ const CartPage = () => {
             setBillPopup(true);
           }}
         >
-          Create Invoice
+          Create Bill
         </Button>
       </div>
       <Modal
-        title="Create Invoice"
+        title="Create Bill"
         visible={billPopup}
         onCancel={() => setBillPopup(false)}
         footer={false}
       >
         <Form layout="vertical" onFinish={handleSubmit}>
-          <Form.Item name="invoiceNumber" label="Invoice Number">
+          <Form.Item name="invoiceNumber" label="Bill Number">
             <Input
               defaultValue={billNumber}
               value={billNumber}
@@ -280,13 +281,13 @@ const CartPage = () => {
             </Select>
           </Form.Item>
           <div className="bill-it">
-            <h5>Sub Total : ₹ {subTotal}</h5>
-            <h4 style={{ fontSize: 14 }}>
+            <h5>Grand Total : ₹ {subTotal}</h5>
+            {/* <h4 style={{ fontSize: 14 }}>
               GST 18% : ₹ {(subTotal * 18) / 100}
-            </h4>
-            <h4>
+            </h4> */}
+            {/* <h4>
               Grand total : <b>₹ {subTotal + (subTotal * 18) / 100}</b>
-            </h4>
+            </h4> */}
           </div>
           <div className="d-flex justify-content-end">
             <Button type="primary" htmlType="submit">
