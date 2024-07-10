@@ -10,6 +10,11 @@ const itemSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    brand: {
+      type: String,
+      required: true,
+      lowercase: true,
+    },
     price: {
       type: Number,
       required: true,

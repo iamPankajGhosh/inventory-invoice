@@ -128,7 +128,7 @@ const ItemPage = () => {
         dispatch({ type: "HIDE_LOADING" });
       } catch (error) {
         dispatch({ type: "HIDE_LOADING" });
-        message.error("Something Went Wrong");
+        message.error("Failed to add item");
         console.log(error);
       }
     } else {
@@ -149,7 +149,7 @@ const ItemPage = () => {
         dispatch({ type: "HIDE_LOADING" });
       } catch (error) {
         dispatch({ type: "HIDE_LOADING" });
-        message.error("Something Went Wrong");
+        message.error("Failed to update item");
         console.log(error);
       }
     }
@@ -208,6 +208,9 @@ const ItemPage = () => {
                   </Select.Option>
                 ))}
               </Select>
+            </Form.Item>
+            <Form.Item name="brand" label="Brand">
+              <Input placeholder="Item brand" style={{ borderRadius: 5 }} />
             </Form.Item>
             <Form.Item name="price" label="Cost Price">
               <Input placeholder="Item cost" style={{ borderRadius: 5 }} />

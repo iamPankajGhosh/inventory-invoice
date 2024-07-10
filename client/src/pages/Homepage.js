@@ -8,7 +8,7 @@ import {
   PlusCircleFilled,
   DeleteFilled,
 } from "@ant-design/icons";
-import { message } from "antd";
+import { Button, Form, message, Select } from "antd";
 const Homepage = () => {
   const [itemsData, setItemsData] = useState([]);
   const [selecedCategory, setSelecedCategory] = useState("all");
@@ -18,6 +18,16 @@ const Homepage = () => {
   const [categories, setCategories] = useState([]);
   const [openForm, setOpenForm] = useState(false);
   const [categoryName, setCategoryName] = useState("");
+  const [selecetedBrand, setSelectedBrand] = useState("");
+  const [brands, setBrands] = useState([]);
+
+  const handleFilter = () => {};
+
+  useEffect(() => {
+    if (searchValue === "") {
+      setItemsData(tempData);
+    }
+  }, [searchValue]);
 
   // handle search using serial no.
   const handleSearch = (value) => {
@@ -121,6 +131,7 @@ const Homepage = () => {
     <DefaultLayout>
       <div className="home-header">
         <h3 style={{ fontWeight: 600, fontSize: 20 }}>Items</h3>
+
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           {/* Search Bar */}
           <div className="searchbar">
@@ -137,6 +148,36 @@ const Homepage = () => {
               <SearchOutlined />
             </button>
           </div>
+
+          <Form
+            layout="vertical"
+            onFinish={handleFilter}
+            style={{
+              display: "flex",
+              gap: 10,
+            }}
+          >
+            <Form.Item name="brand" style={{ margin: 0 }}>
+              <Select
+                placeholder={brands ? "Brand Name" : brands[0]}
+                style={{ width: 150 }}
+                onChange={(value) => setSelectedBrand(value)}
+              >
+                {brands.map((brand, index) => (
+                  <Select.Option
+                    key={index}
+                    value={brand}
+                    className="text-capitalize"
+                  >
+                    {brand}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Button htmlType="submit" type="primary">
+              Filter
+            </Button>
+          </Form>
 
           {/* Add Category Button */}
           <div className="position-relative">
