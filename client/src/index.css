@@ -7,6 +7,23 @@ body {
   background-color: #1e293b;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #334155; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #589eff;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2f81f7;
+}
+
 .item-button button {
   margin-top: 20px;
   width: 200px;
@@ -358,12 +375,9 @@ body {
 .category-outer{
   width: 100%;
   overflow-x: auto;
+  /* padding-bottom: 1rem; */
   white-space: nowrap;
   scrollbar-width: none;
-}
-
-.category-outer::-webkit-scrollbar{
-  display: none;
 }
 
 .item-list-outer{
@@ -389,7 +403,7 @@ body {
 }
 
 .bill-popup.active{
-  top: 70%;
+  top: 90%;
   opacity: 1;
   visibility: visible;
 }
@@ -457,6 +471,7 @@ body {
   margin-bottom: 5px;
   font-size: 10px;
   font-family: "Krungthep",sans-serif;
+  text-transform: capitalize;
 }
 
 .content .invoice-table {
