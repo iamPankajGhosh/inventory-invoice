@@ -64,13 +64,14 @@ const CartPage = () => {
 
   //handle price edit
   const handlePriceEdit = (value) => {
-    console.log(value);
-    console.log(billItems);
     setSelectedValue(value);
     setPopupModal(true);
   };
 
   const handleUpdatePrice = () => {
+    if (selectedValue.price > selectedValue.sellingPrice) {
+      return message.error("Selling price cannot be less than original price");
+    }
     dispatch({
       type: "UPDATE_CART",
       payload: {
