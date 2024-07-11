@@ -229,35 +229,23 @@ const Homepage = () => {
         </div>
       </div>
       <div className="category-outer d-flex mb-4">
-        <div
-          key="all"
+        <button
           className={`d-flex category ${
             selecedCategory === "all" && "category-active"
           }`}
-          onClick={() => {
-            setSelecedCategory("all");
-            setBrands(["all", ...new Set(tempData.map((item) => item.brand))]);
-          }}
+          onClick={() => setSelecedCategory("all")}
         >
           <h4 className="text-white text-capitalize">all</h4>
           <p className="category-count">{tempData.length}</p>
-        </div>
+        </button>
         {categories.map((category) => (
-          <div
+          <button
             key={category.name}
             className={`d-flex category ${
               selecedCategory === category.name && "category-active"
             }`}
             onClick={() => {
               setSelecedCategory(category.name);
-              setBrands([
-                "all",
-                ...new Set(
-                  tempData
-                    .filter((item) => item.category === category.name)
-                    .map((item) => item.brand)
-                ),
-              ]);
             }}
           >
             <h4 className="text-white text-capitalize">{category.name}</h4>
@@ -267,7 +255,7 @@ const Homepage = () => {
                   .length
               }
             </p>
-          </div>
+          </button>
         ))}
       </div>
       <div className="item-list-outer">

@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useDispatch } from "react-redux";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import axios from "axios";
 import { Modal, Button, Table, Form, Input, Select, message } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +16,7 @@ const ItemPage = () => {
   const [popupModal, setPopupModal] = useState(false);
   const [editItem, setEditItem] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
 
   const getAllItems = async () => {
@@ -51,6 +56,12 @@ const ItemPage = () => {
     getAllCategories();
   }, []);
 
+  useEffect(() => {
+    if (searchValue === "") {
+      setItemsData(tempData);
+    }
+  }, [searchValue]);
+
   //handle delete
   const handleDelete = async (record) => {
     try {
@@ -69,6 +80,19 @@ const ItemPage = () => {
       dispatch({ type: "HIDE_LOADING" });
       message.error("Something Went Wrong");
       console.log(error);
+    }
+  };
+
+  const handleSearch = (value) => {
+    const filteredItems = tempData.filter((item) =>
+      item.name.toLowerCase().includes(value.toLowerCase())
+    );
+
+    if (filteredItems.length > 0) {
+      setItemsData(filteredItems);
+    } else {
+      message.error("No items found for the given name.");
+      setItemsData(tempData);
     }
   };
 
@@ -176,15 +200,32 @@ const ItemPage = () => {
             <span>Previous stock</span>
           </button>
         </div>
-        <Button
-          type="primary"
-          style={{ borderRadius: 8, marginBottom: 15 }}
-          onClick={() => {
-            setPopupModal(true);
-          }}
-        >
-          Add Item
-        </Button>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div className="searchbar" style={{ marginBottom: 10 }}>
+            <input
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value.trim())}
+              placeholder="Item name"
+              className="search-field"
+            />
+            <button
+              className="search-icon"
+              onClick={() => handleSearch(searchValue)}
+            >
+              <SearchOutlined />
+            </button>
+          </div>
+
+          <Button
+            type="primary"
+            style={{ borderRadius: 8, marginBottom: 15 }}
+            onClick={() => {
+              setPopupModal(true);
+            }}
+          >
+            Add Item
+          </Button>
+        </div>
       </div>
 
       <Table columns={columns} dataSource={itemsData} bordered />
@@ -213,7 +254,11 @@ const ItemPage = () => {
             <Form.Item name="category" label="Category">
               <Select placeholder="Select category">
                 {categories.map((c) => (
-                  <Select.Option value={c.name} className="text-capitalize">
+                  <Select.Option
+                    key={c._id}
+                    value={c.name}
+                    className="text-capitalize"
+                  >
                     {c.name}
                   </Select.Option>
                 ))}
@@ -231,9 +276,6 @@ const ItemPage = () => {
             <Form.Item name="quantity" label="Quantity">
               <Input placeholder="Item quantity" style={{ borderRadius: 5 }} />
             </Form.Item>
-            {/* <Form.Item name="image" label="Image URL">
-              <Input />
-            </Form.Item> */}
 
             <div className="d-flex justify-content-end">
               <Button type="primary" htmlType="submit">
