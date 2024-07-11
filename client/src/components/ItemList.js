@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Card, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -15,7 +15,6 @@ const ItemList = ({ item }) => {
       payload: { ...item, billQuantity: 1 },
     });
   };
-  const { Meta } = Card;
   return (
     item?.quantity > 0 && (
       <Card
@@ -27,19 +26,22 @@ const ItemList = ({ item }) => {
           border: "none",
         }}
       >
-        <Meta title={item.name} />
-        <p style={{ fontSize: 14, marginTop: 10 }}>
-          <b>Serial No : </b> {item.serialNo}
-        </p>
-        <p style={{ fontSize: 14, marginTop: -8 }}>
-          <b>Selling Price : </b> ₹ {item.sellingPrice}
-        </p>
-        <p style={{ fontSize: 14, marginTop: -8 }} className="text-capitalize">
-          <b>Brand : </b> {item?.brand}
-        </p>
-        <p style={{ fontSize: 14, marginTop: -8 }}>
-          <b>In stock : </b> {item.quantity}
-        </p>
+        <h2 className="card-title">{item.name}</h2>
+
+        <div className="item-details">
+          <p>
+            <b>Serial No : </b> {item.serialNo}
+          </p>
+          <p>
+            <b>Selling Price : </b> ₹ {item.sellingPrice}
+          </p>
+          <p>
+            <b>Brand : </b> {item?.brand}
+          </p>
+          <p>
+            <b>In stock : </b> {item.quantity}
+          </p>
+        </div>
         <div className="item-button">
           <Button
             onClick={() => handleAddTOCart(item._id)}
