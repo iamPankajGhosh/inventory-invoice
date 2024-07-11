@@ -43,9 +43,6 @@ const DefaultLayout = ({ children }) => {
             justifyContent: "center",
           }}
         >
-          {/* <h1 className="text-center text-light font-wight-bold mb-4 mt-4">
-            SiplHub
-          </h1> */}
           <img src={logo} width="150" alt="logo" />
         </div>
         <Menu
@@ -99,31 +96,34 @@ const DefaultLayout = ({ children }) => {
         </div>
       </Sider>
       <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ padding: 0 }}>
-          {React.createElement(
+        <Header
+          className="site-layout-background"
+          style={{
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
+          {/* {React.createElement(
             collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
             {
               className: "trigger",
               onClick: toggle,
             }
-          )}
-          <div
-            className="cart-item d-flex justify-content-space-between flex-row"
-            onClick={() => navigate("/cart")}
-          >
+          )} */}
+          <div onClick={() => navigate("/cart")}>
             <div style={{ position: "relative", display: "flex", gap: 10 }}>
               <button className="invoice-btn">Bill</button>
               {billItems.length > 0 && (
                 <p
                   style={{
                     position: "absolute",
-                    top: "-20px",
-                    right: "-10px",
+                    top: "-8px",
+                    right: "-8px",
                     background: "red",
                     color: "white",
                     borderRadius: "50%",
-                    padding: "2px 6px",
-                    fontSize: "10px",
+                    padding: "4px 8px",
+                    fontSize: "12px",
                   }}
                 >
                   {billItems.length}

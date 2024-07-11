@@ -7,6 +7,12 @@ body {
   background-color: #1e293b;
 }
 
+button {
+  border-radius: 6px !important;
+  height: 35px !important;
+  color: #ffffff !important;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -375,36 +381,36 @@ body {
 .category-outer{
   width: 100%;
   overflow-x: auto;
-  /* padding-bottom: 1rem; */
   white-space: nowrap;
   scrollbar-width: none;
 }
 
 .item-list-outer{
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
 }
 
 .card-title {
-  color: #cbd5e1;
+  color: #ffffff;
   font-weight: 600;
+  letter-spacing: 1px;
   line-height: 1;
   margin-bottom: 1rem;
   flex-grow: 1;
 }
 
-/* .item-details{
-  flex-grow: 1;
-} */
-
 .item-details p {
   line-height: 1.2;
+  color: #e8e8e8;
   margin: 0;
   font-size: 16px;
   text-transform: capitalize;
+}
+
+.item-details p b {
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 .bill-popup{
@@ -418,7 +424,6 @@ body {
   visibility: hidden;
   opacity: 0;
   transition: 200ms ease-in-out;
-  z-index: 100 !important;
 }
 
 .bill-popup.active{
@@ -488,7 +493,7 @@ body {
 
 .content .customer-details p {
   margin-bottom: 5px;
-  font-size: 10px;
+  font-size: 12px;
   font-family: "Krungthep",sans-serif;
   text-transform: capitalize;
 }
@@ -538,7 +543,7 @@ body {
 .content .logo p {
   font-size: 12px;
   padding-inline: 5em;
-  margin-bottom: 10em;
+  margin-bottom: 6em;
   font-family: "Krungthep",sans-serif;
 }
 

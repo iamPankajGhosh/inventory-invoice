@@ -201,7 +201,7 @@ const ItemPage = () => {
           </button>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div className="searchbar" style={{ marginBottom: 10 }}>
+          <div className="searchbar" style={{ marginBottom: 15 }}>
             <input
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value.trim())}
