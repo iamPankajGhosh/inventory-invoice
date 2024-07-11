@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const ItemPage = () => {
   const dispatch = useDispatch();
   const [itemsData, setItemsData] = useState([]);
+  const [tempData, setTempData] = useState([]);
   const [popupModal, setPopupModal] = useState(false);
   const [editItem, setEditItem] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -21,9 +22,9 @@ const ItemPage = () => {
       const { data } = await axios.get(
         `${process.env.REACT_APP_SERVER_URL}/api/items/get-item`
       );
+      setTempData(data);
       setItemsData(data.filter((item) => item.quantity !== 0));
       dispatch({ type: "HIDE_LOADING" });
-      console.log(data);
     } catch (error) {
       dispatch({ type: "HIDE_LOADING" });
       console.log(error);
@@ -38,7 +39,6 @@ const ItemPage = () => {
       const { data } = await axios.get(
         `${process.env.REACT_APP_SERVER_URL}/api/categories/get-category`
       );
-      console.log(data);
       setCategories(data);
       dispatch({ type: "HIDE_LOADING" });
     } catch (error) {
@@ -113,6 +113,14 @@ const ItemPage = () => {
   // handle form  submit
   const handleSubmit = async (value) => {
     if (editItem === null) {
+      const findItemBySerialNumber = tempData.filter(
+        (item) => item.serialNo === value.serialNo
+      );
+
+      if (findItemBySerialNumber.length > 0) {
+        return message.error("Serial Number already exists");
+      }
+
       try {
         dispatch({
           type: "SHOW_LOADING",
@@ -136,7 +144,7 @@ const ItemPage = () => {
         dispatch({
           type: "SHOW_LOADING",
         });
-        await axios.put(
+        const res = await axios.post(
           `${process.env.REACT_APP_SERVER_URL}/api/items/edit-item`,
           {
             ...value,
@@ -144,6 +152,7 @@ const ItemPage = () => {
           }
         );
         message.success("Item Updated Succesfully");
+        console.log(res.data);
         getAllItems();
         setPopupModal(false);
         dispatch({ type: "HIDE_LOADING" });
@@ -170,7 +179,9 @@ const ItemPage = () => {
         <Button
           type="primary"
           style={{ borderRadius: 8, marginBottom: 15 }}
-          onClick={() => setPopupModal(true)}
+          onClick={() => {
+            setPopupModal(true);
+          }}
         >
           Add Item
         </Button>
@@ -192,7 +203,6 @@ const ItemPage = () => {
             layout="vertical"
             initialValues={editItem}
             onFinish={handleSubmit}
-            // onFinish={notAllowed}
           >
             <Form.Item name="serialNo" label="Serial No.">
               <Input placeholder="Item serial no" style={{ borderRadius: 5 }} />

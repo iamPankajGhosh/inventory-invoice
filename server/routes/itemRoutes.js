@@ -16,7 +16,7 @@ router.get("/get-item", getItemController);
 router.post("/add-item", addItemController);
 
 //method - PUT
-router.put("/edit-item", editItemController);
+router.post("/edit-item", editItemController);
 
 //method - DELETE
 router.post("/delete-item", deleteItemController);

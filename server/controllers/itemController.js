@@ -68,42 +68,49 @@ const editItemController = async (req, res) => {
     const { itemId } = req.body;
     console.log(itemId);
     const updatedStockItem = await itemModel.findOne({ _id: itemId });
+
+    //update item
     updatedStockItem.serialNo = req.body.serialNo;
     updatedStockItem.name = req.body.name;
+    updatedStockItem.brand = req.body.brand;
     updatedStockItem.category = req.body.category;
-    updatedStockItem.price = req.body.price;
-    updatedStockItem.sellingPrice = req.body.sellingPrice;
-    updatedStockItem.quantity = req.body.quantity;
-    await updatedStockItem.save();
 
-    // update profit report
-    const updatedItemsMonth = new Date(
-      updatedStockItem.updatedAt
-    ).toLocaleString("en-US", {
-      month: "long",
-    });
-    const updatedItemsYear = new Date(updatedStockItem.updatedAt).getFullYear();
-
+    //update expense
+    const updateItemMonth = new Date(updatedStockItem.updatedAt)
+      .toLocaleString("en-US", {
+        month: "long",
+      })
+      .toLowerCase();
+    const updateItemYear = new Date(updatedStockItem.updatedAt).getFullYear();
     const findExpensesByMonthAndYear = await ProfitReport.findOne({
-      month: updatedItemsMonth,
-      year: updatedItemsYear,
+      month: updateItemMonth,
+      year: updateItemYear,
     });
 
-    //update expenses
-    findExpensesByMonthAndYear.expenses +=
-      updatedStockItem.price * updatedStockItem.quantity;
+    findExpensesByMonthAndYear.expenses -=
+      updatedStockItem.quantity * updatedStockItem.price;
+    findExpensesByMonthAndYear.expenses += req.body.quantity * req.body.price;
+
     //update profit
     findExpensesByMonthAndYear.profit = (
       findExpensesByMonthAndYear.revenue - findExpensesByMonthAndYear.expenses
     ).toFixed(2);
     await findExpensesByMonthAndYear.save();
 
-    res.status(201).json("item Updated");
+    // update stock price and quantity
+    updatedStockItem.price = req.body.price;
+    updatedStockItem.sellingPrice = req.body.sellingPrice;
+    updatedStockItem.quantity = req.body.quantity;
+
+    await updatedStockItem.save();
+
+    res.status(201).json(updatedStockItem);
   } catch (error) {
     res.status(400).send(error);
     console.log(error);
   }
 };
+
 //delete item
 const deleteItemController = async (req, res) => {
   try {
