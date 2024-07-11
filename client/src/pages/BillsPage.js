@@ -318,11 +318,11 @@ const BillsPage = () => {
                 <tbody>
                   {selectedBill?.billItems?.map((item, index) => (
                     <tr key={index}>
-                      <td>{item.serialNo}</td>
-                      <td style={{ textAlign: "left" }}>{item.name}</td>
-                      <td>{item.quantity}</td>
+                      <td>{index + 1}</td>
+                      <td>{item.name}</td>
+                      <td>{item.billQuantity}</td>
                       <td>{item.sellingPrice}</td>
-                      <td>{item.quantity * item.sellingPrice}</td>
+                      <td>{item.billQuantity * item.sellingPrice}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -342,21 +342,16 @@ const BillsPage = () => {
                 <span style={{ color: "#000000", marginRight: "10px" }}>
                   Grand Total :
                 </span>
+                <br />
                 Rs. {selectedBill?.totalAmount.toFixed(2)}
               </p>
             </div>
             <div className="logo">
               <p>E.&O.E.</p>
-              <img src={BillLogo} height={40} alt="logo" />
+              <img src={BillLogo} height={30} alt="logo" />
             </div>
             <div className="footer">
               <p>Thank you for your business!</p>
-            </div>
-            <div className="terms">
-              <p className="text-center">
-                Goods once sold cannot be taken back or exchanged. General Terms
-                as Usual.
-              </p>
             </div>
           </div>
         </div>

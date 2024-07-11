@@ -483,6 +483,7 @@ body {
 
 .content .total {
   margin-inline: 2em;
+  margin-bottom: 2em;
   display: flex;
   justify-content: space-between;
 }
@@ -502,18 +503,15 @@ body {
 
 .content .logo p {
   font-size: 12px;
+  padding-inline: 5em;
+  margin-bottom: 10em;
   font-family: "Krungthep",sans-serif;
 }
 
 .content .footer {
   margin-inline: 2em;
+  margin-top: 5em;
   text-align: center;
-  margin-block: 3em;
-  font-family: "Krungthep",sans-serif;
-}
-
-.content .terms {
-  margin-inline: 2em;
-  padding-bottom: 2em;
+  padding-block: 2em;
   font-family: "Krungthep",sans-serif;
 }
