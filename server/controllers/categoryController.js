@@ -4,6 +4,8 @@ const categoryModel = require("../models/categoryModel");
 const getCategoryController = async (req, res) => {
   try {
     const categories = await categoryModel.find();
+    categories.sort((a, b) => a.name.localeCompare(b.name));
+
     res.status(200).send(categories);
   } catch (error) {
     res.status(400).send(error);
