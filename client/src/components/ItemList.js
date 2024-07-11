@@ -32,7 +32,7 @@ const ItemList = ({ item }) => {
           <b>Serial No : </b> {item.serialNo}
         </p>
         <p style={{ fontSize: 14, marginTop: -8 }}>
-          <b>Cost : </b> ₹ {item.sellingPrice}
+          <b>Selling Price : </b> ₹ {item.sellingPrice}
         </p>
         <p style={{ fontSize: 14, marginTop: -8 }} className="text-capitalize">
           <b>Brand : </b> {item?.brand}
