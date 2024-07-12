@@ -79,8 +79,9 @@
   height: 35px !important;
 }
 
-.ant-form-item {
-
+.ant-select-arrow svg{
+  color: #09090b !important;
+  height: 10px !important;
 }
 
 .item-list-outer .ant-card{

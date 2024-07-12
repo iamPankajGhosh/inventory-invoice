@@ -102,6 +102,13 @@ input:focus{
   background-color: #e2e8f0;
 }
 
+.filter-btn{
+  display: flex !important;
+  align-items: center;
+  gap: 5px;
+  font-size: 16px !important;
+}
+
 .item-button button {
   margin-top: 20px;
   width: 200px;
@@ -380,7 +387,8 @@ input:focus{
 
 .category-count{
   font-weight: 600;
-  margin-left: 3px;
+  margin-left: 5px;
+  margin-bottom: 5px;
   color: #cbd5e1;
 }
 
