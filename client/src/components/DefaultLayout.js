@@ -2,18 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Layout, Menu } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  UserOutlined,
-  LogoutOutlined,
-  HomeOutlined,
-  CopyOutlined,
-  UnorderedListOutlined,
-  // ShoppingCartOutlined,
-  // GithubOutlined,
-} from "@ant-design/icons";
 import "../styles/DefaultLayout.css";
 import Spinner from "./Spinner";
 import logo from "../assets/logo.png";
+import {
+  FaArrowRightFromBracket,
+  FaBox,
+  FaChartSimple,
+  FaFileLines,
+  FaHouse,
+  FaImagePortrait,
+} from "react-icons/fa6";
 const { Header, Sider, Content } = Layout;
 
 const DefaultLayout = ({ children }) => {
@@ -33,48 +32,33 @@ const DefaultLayout = ({ children }) => {
     <Layout>
       {loading && <Spinner />}
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div
-          className="logo"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <img src={logo} width="150" alt="logo" />
+        <div className="logo">
+          <img src={logo} width="100%" alt="logo" />
         </div>
+
         <Menu
           theme="dark"
           mode="inline"
           defaultSelectedKeys={window.location.pathname}
         >
-          <Menu.Item key="/" icon={<HomeOutlined />}>
+          <Menu.Item key="/" icon={<FaHouse size={20} />}>
             <Link to="/">Home</Link>
           </Menu.Item>
-          <Menu.Item key="/bills" icon={<CopyOutlined />}>
+          <Menu.Item key="/items" icon={<FaBox size={20} />}>
+            <Link to="/items">Stock</Link>
+          </Menu.Item>
+          <Menu.Item key="/bills" icon={<FaFileLines size={20} />}>
             <Link to="/bills">Bills</Link>
           </Menu.Item>
-          <Menu.Item key="/items" icon={<UnorderedListOutlined />}>
-            <Link to="/items">Stocks</Link>
-          </Menu.Item>
-          <Menu.Item key="/customers" icon={<UserOutlined />}>
+          <Menu.Item key="/customers" icon={<FaImagePortrait size={20} />}>
             <Link to="/customers">Customers</Link>
           </Menu.Item>
-          <Menu.Item key="/reports" icon={<CopyOutlined />}>
+          <Menu.Item key="/reports" icon={<FaChartSimple size={20} />}>
             <Link to="/reports">Reports</Link>
           </Menu.Item>
-          {/* <Menu.Item key="/dev" icon={<GithubOutlined />}>
-            <a
-              href="https://github.com/ishanaudichya/business-erp-mern"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Git Repo
-            </a>
-          </Menu.Item> */}
           <Menu.Item
             key="/logout"
-            icon={<LogoutOutlined />}
+            icon={<FaArrowRightFromBracket size={20} />}
             onClick={() => {
               localStorage.removeItem("auth");
               navigate("/login");
@@ -83,6 +67,7 @@ const DefaultLayout = ({ children }) => {
             Logout
           </Menu.Item>
         </Menu>
+
         <div
           className="text-center text-light font-wight-bold mb-4 b-0 w-100 position-absolute"
           style={{ position: "absolute", bottom: "0", width: "100%" }}
@@ -94,13 +79,7 @@ const DefaultLayout = ({ children }) => {
         </div>
       </Sider>
       <Layout className="site-layout">
-        <Header
-          className="site-layout-background"
-          style={{
-            alignItems: "center",
-            justifyContent: "flex-end",
-          }}
-        >
+        <Header className="site-layout-background">
           {/* {React.createElement(
             collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
             {
@@ -130,16 +109,7 @@ const DefaultLayout = ({ children }) => {
             </div>
           </div>
         </Header>
-        <Content
-          className="site-layout-background"
-          style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: 280,
-          }}
-        >
-          {children}
-        </Content>
+        <Content className="site-layout-background">{children}</Content>
       </Layout>
     </Layout>
   );

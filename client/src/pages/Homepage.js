@@ -3,7 +3,13 @@ import DefaultLayout from "./../components/DefaultLayout";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import ItemList from "../components/ItemList";
-import { FaC, FaCirclePlus, FaMagnifyingGlass, FaTrash } from "react-icons/fa6";
+import {
+  FaC,
+  FaCirclePlus,
+  FaFilter,
+  FaMagnifyingGlass,
+  FaTrash,
+} from "react-icons/fa6";
 import { Button, Form, message, Select } from "antd";
 const Homepage = () => {
   const [itemsData, setItemsData] = useState([]);
@@ -153,17 +159,10 @@ const Homepage = () => {
 
         {/* Filter by Brand and Category */}
         <div className="filter">
-          <Form
-            layout="vertical"
-            onFinish={handleFilter}
-            style={{
-              display: "flex",
-              gap: 10,
-            }}
-          >
+          <Form layout="vertical" onFinish={handleFilter}>
             <Form.Item name="brand" style={{ margin: 0 }}>
               <Select
-                placeholder={brands ? brands[0] : "Brand Name"}
+                placeholder="Brand Name"
                 style={{ width: 150 }}
                 onChange={(value) => setSelectedBrand(value)}
                 className="text-capitalize"
@@ -179,8 +178,9 @@ const Homepage = () => {
                 ))}
               </Select>
             </Form.Item>
-            <Button htmlType="submit" type="primary">
-              Filter
+            <Button htmlType="submit" type="primary" className="filter-btn">
+              <FaFilter size={20} />
+              <span>Filter</span>
             </Button>
           </Form>
         </div>

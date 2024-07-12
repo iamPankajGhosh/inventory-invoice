@@ -64,6 +64,7 @@ input:focus{
 
 .header h2 {
   color: #ffffff;
+  flex-grow: 1;
   font-weight: 700;
   font-family: "Krungthep",sans-serif;
   margin: 0;
@@ -85,6 +86,7 @@ input:focus{
 
 .searchbar {
   flex-grow: 1;
+  max-width: 300px;
   display: flex;
   align-items: center;
   background-color: #e2e8f0;
@@ -100,6 +102,12 @@ input:focus{
 .search-field{
   width: 100%;
   background-color: #e2e8f0;
+}
+
+.filter{
+  border-radius: 6px;
+  background-color: #2f81f7 !important;
+  overflow: hidden !important;
 }
 
 .filter-btn{
