@@ -3,14 +3,7 @@ import DefaultLayout from "./../components/DefaultLayout";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import ItemList from "../components/ItemList";
-import { DeleteFilled } from "@ant-design/icons";
-import {
-  FaC,
-  FaCircleMinus,
-  FaCirclePlus,
-  FaMagnifyingGlass,
-  FaTrash,
-} from "react-icons/fa6";
+import { FaC, FaCirclePlus, FaMagnifyingGlass, FaTrash } from "react-icons/fa6";
 import { Button, Form, message, Select } from "antd";
 const Homepage = () => {
   const [itemsData, setItemsData] = useState([]);
@@ -56,43 +49,39 @@ const Homepage = () => {
 
   //useEffect
   useEffect(() => {
-    const getAllItems = async () => {
-      try {
-        dispatch({
-          type: "SHOW_LOADING",
-        });
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/api/items/get-item`
-        );
-        setTempData(data.filter((item) => item.quantity !== 0));
-        setItemsData(data);
-        setBrands(["all", ...new Set(data.map((item) => item.brand))]);
-        dispatch({ type: "HIDE_LOADING" });
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     getAllItems();
-  }, [dispatch]);
-
-  useEffect(() => {
-    const getAllCategories = async () => {
-      try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/api/categories/get-category`
-        );
-        setCategories(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     getAllCategories();
-  }, [loading]);
+  }, []);
 
-  const handleAddCategory = () => {
+  const getAllItems = async () => {
+    try {
+      dispatch({
+        type: "SHOW_LOADING",
+      });
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/api/items/get-item`
+      );
+      setTempData(data.filter((item) => item.quantity !== 0));
+      setItemsData(data);
+      setBrands(["all", ...new Set(data.map((item) => item.brand))]);
+      dispatch({ type: "HIDE_LOADING" });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAllCategories = async () => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/api/categories/get-category`
+      );
+      setCategories(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleAddCategory = async () => {
     if (!categoryName) {
       message.error("Please enter a category name.");
       return;
@@ -106,26 +95,36 @@ const Homepage = () => {
 
     // Add the new category
     setLoading("add-category");
-    axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/api/categories/add-category`, {
-        name: categoryName,
-      })
-      .then((response) => {
-        setCategories([...categories, response.data]);
-        setCategoryName("");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
-  const handleDeleteCategory = (e) => {
-    e.preventDefault();
-    setLoading("delete-category");
     try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/api/categories/add-category`,
+        {
+          name: categoryName,
+        }
+      );
+      getAllCategories();
+      message.success(res.data);
     } catch (error) {
       console.log(error);
-      return message.error("Failed to delete category");
+      message.error("Failed to add category.");
+    }
+  };
+
+  const handleDeleteCategory = async (id) => {
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/api/categories/delete-category/`,
+        {
+          id,
+        }
+      );
+      console.log(res.data);
+      getAllCategories();
+      message.success(res.data);
+    } catch (error) {
+      console.log(error);
+      message.error("Failed to delete category");
     }
   };
 
@@ -207,7 +206,7 @@ const Homepage = () => {
               onChange={(e) => setCategoryName(e.target.value)}
               placeholder="Enter category name"
             />
-            <button onClick={handleAddCategory}>
+            <button type="button" onClick={() => handleAddCategory()}>
               {loading === "add-cetegory" ? (
                 <FaC size={20} className="loader" />
               ) : (
@@ -221,15 +220,12 @@ const Homepage = () => {
                   <p>{category.name}</p>
                   <button
                     className="category-delete-btn"
+                    type="button"
                     onClick={() => {
                       handleDeleteCategory(category._id);
                     }}
                   >
-                    {loading === "delete-category" ? (
-                      <FaC size={18} className="loader" />
-                    ) : (
-                      <FaTrash size={18} />
-                    )}
+                    <FaTrash size={20} />
                   </button>
                 </div>
               ))}
