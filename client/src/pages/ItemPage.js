@@ -9,6 +9,7 @@ import {
 import axios from "axios";
 import { Modal, Button, Table, Form, Input, Select, message } from "antd";
 import { useNavigate } from "react-router-dom";
+import { FaAngleLeft, FaCirclePlus, FaMagnifyingGlass } from "react-icons/fa6";
 const ItemPage = () => {
   const dispatch = useDispatch();
   const [itemsData, setItemsData] = useState([]);
@@ -190,42 +191,44 @@ const ItemPage = () => {
 
   return (
     <DefaultLayout>
-      <div className="d-flex justify-content-between">
-        <div className="d-flex gap-4 align-items-center">
-          <h1>Item List</h1>
+      <div className="header">
+        {/* Header */}
+        <h2>Stock</h2>
+
+        <button
+          className="add-category"
+          onClick={() => navigate("/items/previous-stock")}
+        >
+          <FaAngleLeft color="#ffffff" size={20} />
+          <span>Previous stock</span>
+        </button>
+
+        {/* Search Bar */}
+        <div className="searchbar">
+          <input
+            type="text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value.trim())}
+            placeholder="Item name"
+            className="search-field"
+          />
           <button
-            className="previous-stock-btn"
-            onClick={() => navigate("/items/previous-stock")}
+            className="search-btn"
+            onClick={() => handleSearch(searchValue)}
           >
-            <span>Previous stock</span>
+            <FaMagnifyingGlass size={20} />
           </button>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div className="searchbar" style={{ marginBottom: 15 }}>
-            <input
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value.trim())}
-              placeholder="Item name"
-              className="search-field"
-            />
-            <button
-              className="search-icon"
-              onClick={() => handleSearch(searchValue)}
-            >
-              <SearchOutlined />
-            </button>
-          </div>
 
-          <Button
-            type="primary"
-            style={{ borderRadius: 8, marginBottom: 15 }}
-            onClick={() => {
-              setPopupModal(true);
-            }}
-          >
-            Add Item
-          </Button>
-        </div>
+        <button
+          className="add-category"
+          onClick={() => {
+            setPopupModal(true);
+          }}
+        >
+          <FaCirclePlus color="#ffffff" size={20} />
+          <span>Item</span>
+        </button>
       </div>
 
       <Table columns={columns} dataSource={itemsData} bordered />
