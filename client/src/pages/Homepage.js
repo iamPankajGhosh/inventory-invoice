@@ -3,11 +3,14 @@ import DefaultLayout from "./../components/DefaultLayout";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import ItemList from "../components/ItemList";
+import { DeleteFilled } from "@ant-design/icons";
 import {
-  SearchOutlined,
-  PlusCircleFilled,
-  DeleteFilled,
-} from "@ant-design/icons";
+  FaC,
+  FaCircleMinus,
+  FaCirclePlus,
+  FaMagnifyingGlass,
+  FaTrash,
+} from "react-icons/fa6";
 import { Button, Form, message, Select } from "antd";
 const Homepage = () => {
   const [itemsData, setItemsData] = useState([]);
@@ -20,6 +23,7 @@ const Homepage = () => {
   const [categoryName, setCategoryName] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("all");
   const [brands, setBrands] = useState([]);
+  const [loading, setLoading] = useState("");
 
   const handleFilter = () => {
     console.log(selectedBrand);
@@ -70,24 +74,23 @@ const Homepage = () => {
       }
     };
 
+    getAllItems();
+  }, [dispatch]);
+
+  useEffect(() => {
     const getAllCategories = async () => {
       try {
-        dispatch({
-          type: "SHOW_LOADING",
-        });
         const { data } = await axios.get(
           `${process.env.REACT_APP_SERVER_URL}/api/categories/get-category`
         );
         setCategories(data);
-        dispatch({ type: "HIDE_LOADING" });
       } catch (error) {
         console.log(error);
       }
     };
 
-    getAllItems();
     getAllCategories();
-  }, [dispatch]);
+  }, [loading]);
 
   const handleAddCategory = () => {
     if (!categoryName) {
@@ -102,61 +105,55 @@ const Homepage = () => {
     }
 
     // Add the new category
+    setLoading("add-category");
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/api/categories/add-category`, {
         name: categoryName,
       })
       .then((response) => {
-        console.log(response.data);
         setCategories([...categories, response.data]);
         setCategoryName("");
-        setOpenForm(false);
       })
       .catch((error) => {
         console.log(error);
       });
-    setCategories([...categories, { name: categoryName }]);
-    setCategoryName("");
-    setOpenForm(false);
   };
 
-  const handleDeleteCategory = (id) => {
-    axios
-      .post(
-        `${process.env.REACT_APP_SERVER_URL}/api/categories/delete-category`,
-        { id }
-      )
-      .then((response) => {
-        console.log(response.data);
-        setCategories(categories.filter((category) => category._id !== id));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const handleDeleteCategory = (e) => {
+    e.preventDefault();
+    setLoading("delete-category");
+    try {
+    } catch (error) {
+      console.log(error);
+      return message.error("Failed to delete category");
+    }
   };
 
   return (
     <DefaultLayout>
-      <div className="home-header">
-        <h3 style={{ fontWeight: 600, fontSize: 20 }}>Items</h3>
+      <div className="header">
+        {/* Header */}
+        <h2>Items</h2>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          {/* Search Bar */}
-          <div className="searchbar">
-            <input
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value.trim())}
-              placeholder="Serial no."
-              className="search-field"
-            />
-            <button
-              className="search-icon"
-              onClick={() => handleSearch(searchValue)}
-            >
-              <SearchOutlined />
-            </button>
-          </div>
+        {/* Search Bar */}
+        <div className="searchbar">
+          <input
+            type="text"
+            placeholder="Serial no."
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value.trim())}
+            className="search-field"
+          />
+          <button
+            className="search-btn"
+            onClick={() => handleSearch(searchValue)}
+          >
+            <FaMagnifyingGlass size={20} />
+          </button>
+        </div>
 
+        {/* Filter by Brand and Category */}
+        <div className="filter">
           <Form
             layout="vertical"
             onFinish={handleFilter}
@@ -187,77 +184,86 @@ const Homepage = () => {
               Filter
             </Button>
           </Form>
+        </div>
 
-          {/* Add Category Button */}
-          <div className="position-relative">
-            <button
-              className="add-category"
-              onClick={() => setOpenForm(!openForm)}
-            >
-              <span>
-                <PlusCircleFilled />
-              </span>
-              <p>Add Category</p>
+        {/* Add Category Button */}
+        <div className="position-relative">
+          <button
+            className="add-category"
+            onClick={() => setOpenForm(!openForm)}
+          >
+            <FaCirclePlus color="#ffffff" size={20} />
+            <span>Category</span>
+          </button>
+
+          <form
+            className={`position-absolute category-form ${
+              openForm && "active"
+            }`}
+          >
+            <input
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Enter category name"
+            />
+            <button onClick={handleAddCategory}>
+              {loading === "add-cetegory" ? (
+                <FaC size={20} className="loader" />
+              ) : (
+                "Add"
+              )}
             </button>
 
-            <form
-              className={`position-absolute category-form ${
-                openForm && "active"
-              }`}
-            >
-              <input
-                type="text"
-                value={categoryName}
-                onChange={(e) => setCategoryName(e.target.value)}
-                placeholder="Enter category name"
-              />
-              <button onClick={handleAddCategory}>Add</button>
-
-              <div className="category-list mt-3">
-                {categories.map((category) => (
-                  <div key={category.name} className="category-item mb-2">
-                    <p>{category.name}</p>
-                    <DeleteFilled
-                      className="delete-btn"
-                      onClick={() => handleDeleteCategory(category._id)}
-                    />
-                  </div>
-                ))}
-              </div>
-            </form>
-          </div>
+            <div className="category-list mt-3">
+              {categories.map((category) => (
+                <div key={category.name} className="category-item mb-2">
+                  <p>{category.name}</p>
+                  <button
+                    className="category-delete-btn"
+                    onClick={() => {
+                      handleDeleteCategory(category._id);
+                    }}
+                  >
+                    {loading === "delete-category" ? (
+                      <FaC size={18} className="loader" />
+                    ) : (
+                      <FaTrash size={18} />
+                    )}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </form>
         </div>
       </div>
-      <div className="category-outer d-flex mb-4">
+
+      <div className="category-outer">
         <button
-          className={`d-flex category ${
-            selecedCategory === "all" && "category-active"
-          }`}
+          className={`category-btn ${selecedCategory === "all" && "active"}`}
           onClick={() => setSelecedCategory("all")}
         >
-          <h4 className="text-white text-capitalize">all</h4>
-          <p className="category-count">{tempData.length}</p>
+          <span>all</span>
+          <span className="category-count">{tempData.length}</span>
         </button>
         {categories.map((category) => (
           <button
-            key={category.name}
-            className={`d-flex category ${
-              selecedCategory === category.name && "category-active"
+            className={`category-btn ${
+              selecedCategory === category.name && "active"
             }`}
-            onClick={() => {
-              setSelecedCategory(category.name);
-            }}
+            onClick={() => setSelecedCategory(category.name)}
           >
-            <h4 className="text-white text-capitalize">{category.name}</h4>
-            <p className="category-count">
+            <span>{category.name}</span>
+            <span className="category-count">
               {
                 tempData.filter((item) => item.category === category.name)
                   .length
               }
-            </p>
+            </span>
           </button>
         ))}
       </div>
+
       <div className="item-list-outer">
         {
           // itemsData.length > 0 &&

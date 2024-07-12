@@ -329,16 +329,14 @@ const BillsPage = () => {
               </table>
             </div>
             <div className="total">
-              <p className="text-capitalize">
-                <span style={{ color: "#000000", marginRight: "10px" }}>
-                  Rupees in Words :{" "}
-                </span>
+              <p className="text-capitalize" style={{ maxWidth: 300 }}>
+                <span style={{ color: "#000000" }}>Rupees in Words : </span>
                 <br />
                 {selectedBill &&
                   toWords(selectedBill?.totalAmount.toFixed(2))}{" "}
                 Rupees Only
               </p>
-              <p>
+              <p style={{ fontSize: 18 }}>
                 <span style={{ color: "#000000", marginRight: "10px" }}>
                   Grand Total :
                 </span>

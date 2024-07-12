@@ -64,6 +64,25 @@
   background-color: #2d3741 !important;
 }
 
+.ant-form-vertical{
+  display: flex;
+  align-items: center;
+  gap: 2px !important;
+}
+
+.ant-form-item{
+  border-radius: 6px !important;
+  overflow: hidden;
+}
+
+.ant-select-selector {
+  height: 35px !important;
+}
+
+.ant-form-item {
+
+}
+
 .item-list-outer .ant-card{
   width: 100% !important;
   background-color: #1e293b !important;
