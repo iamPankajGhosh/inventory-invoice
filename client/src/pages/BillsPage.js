@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useDispatch } from "react-redux";
-import { EyeOutlined, DeleteOutlined, SearchOutlined } from "@ant-design/icons";
+import { EyeOutlined, DeleteOutlined } from "@ant-design/icons";
 import { toWords } from "number-to-words";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import { Button, Table, message, Select, Form } from "antd";
 import BillLogo from "../assets/bill-logo.png";
 import "../styles/InvoiceStyles.css";
+import { FaFileLines, FaFilter, FaMagnifyingGlass } from "react-icons/fa6";
 
 const BillsPage = () => {
   const componentRef = useRef();
@@ -185,27 +186,41 @@ const BillsPage = () => {
   // console.log(selectedBill);
   return (
     <DefaultLayout>
-      <div className="d-flex color-white justify-content-between mb-4">
-        <div className="d-flex gap-4 align-items-center">
-          <h1>Bills</h1>
-          <button
-            className="previous-stock-btn"
-            onClick={() => {
-              setSearchValue("");
-              setBillsData(tempData);
-            }}
-          >
-            <span>All Bills</span>
-          </button>
+      <div className="header">
+        {/* Header */}
+        <h2>Bills</h2>
 
-          <Form
-            layout="vertical"
-            onFinish={handleFilter}
-            style={{
-              display: "flex",
-              gap: 10,
-            }}
+        <button
+          className="add-category"
+          onClick={() => {
+            setSearchValue("");
+            setBillsData(tempData);
+          }}
+        >
+          <FaFileLines size={15} />
+          <span>All Bills</span>
+        </button>
+
+        {/* Search Bar */}
+        <div className="searchbar">
+          <input
+            type="text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value.trim())}
+            placeholder="Bill no."
+            className="search-field"
+          />
+          <button
+            className="search-btn"
+            onClick={() => handleSearch(searchValue)}
           >
+            <FaMagnifyingGlass size={20} />
+          </button>
+        </div>
+
+        {/* Filter by Brand and Category */}
+        <div className="filter">
+          <Form layout="vertical" onFinish={handleFilter}>
             <Form.Item name="category" style={{ margin: 0 }}>
               <Select
                 placeholder={months[0]}
@@ -231,26 +246,11 @@ const BillsPage = () => {
                 ))}
               </Select>
             </Form.Item>
-            <Button htmlType="submit" type="primary">
-              Filter
+            <Button htmlType="submit" type="primary" className="filter-btn">
+              <FaFilter size={15} />
+              <span>Filter</span>
             </Button>
           </Form>
-        </div>
-
-        {/* Search Bar */}
-        <div className="searchbar">
-          <input
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value.trim())}
-            placeholder="Bill no."
-            className="search-field"
-          />
-          <button
-            className="search-icon"
-            onClick={() => handleSearch(searchValue)}
-          >
-            <SearchOutlined />
-          </button>
         </div>
       </div>
 
