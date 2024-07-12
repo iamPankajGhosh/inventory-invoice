@@ -244,6 +244,7 @@ const Homepage = () => {
         </button>
         {categories.map((category) => (
           <button
+            key={category.name}
             className={`category-btn ${
               selecedCategory === category.name && "active"
             }`}
