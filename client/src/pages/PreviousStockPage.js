@@ -5,6 +5,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { Modal, Button, Table, Form, Input, Select, message } from "antd";
 import { useNavigate } from "react-router-dom";
+import { FaAngleRight, FaCirclePlus } from "react-icons/fa6";
 const PreviousStockPage = () => {
   const dispatch = useDispatch();
   const [itemsData, setItemsData] = useState([]);
@@ -157,24 +158,14 @@ const PreviousStockPage = () => {
 
   return (
     <DefaultLayout>
-      <div className="d-flex justify-content-between">
-        <div className="d-flex gap-4 align-items-center">
-          <h1>Item List</h1>
-          <button
-            className="previous-stock-btn"
-            onClick={() => navigate("/items")}
-          >
-            <span></span>
-            <span>Current stock</span>
-          </button>
-        </div>
-        {/* <Button
-          type="primary"
-          style={{ borderRadius: 8, marginBottom: 15 }}
-          onClick={() => setPopupModal(true)}
-        >
-          Add Item
-        </Button> */}
+      <div className="header">
+        {/* Header */}
+        <h2>Out of Stock</h2>
+
+        <button className="add-category" onClick={() => navigate("/items")}>
+          <span>Current stock</span>
+          <FaAngleRight color="#ffffff" size={20} />
+        </button>
       </div>
 
       <Table columns={columns} dataSource={itemsData} bordered />
