@@ -18,6 +18,7 @@ const ItemPage = () => {
   const [editItem, setEditItem] = useState(null);
   const [categories, setCategories] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [serialNumber, setSerialNumber] = useState(123);
   const navigate = useNavigate();
 
   const getAllItems = async () => {
@@ -109,7 +110,8 @@ const ItemPage = () => {
     //   ),
     // },
     // { title: "Price", dataIndex: "price" },
-    { title: "Price (Rs.)", dataIndex: "price" },
+    { title: "Cost Price (Rs.)", dataIndex: "price" },
+    { title: "Sell Price (Rs.)", dataIndex: "sellingPrice" },
     { title: "Quantity", dataIndex: "quantity" },
     {
       title: "Actions",
@@ -249,7 +251,11 @@ const ItemPage = () => {
             onFinish={handleSubmit}
           >
             <Form.Item name="serialNo" label="Serial No.">
-              <Input placeholder="Item serial no" style={{ borderRadius: 5 }} />
+              <Input
+                value={serialNumber}
+                placeholder="Item serial no"
+                style={{ borderRadius: 5 }}
+              />
             </Form.Item>
             <Form.Item name="name" label="Name">
               <Input placeholder="Item name" style={{ borderRadius: 5 }} />
