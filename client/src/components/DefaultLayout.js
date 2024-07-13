@@ -89,7 +89,10 @@ const DefaultLayout = ({ children }) => {
           )} */}
           <div onClick={() => navigate("/cart")}>
             <div style={{ position: "relative", display: "flex", gap: 10 }}>
-              <button className="invoice-btn">Bill</button>
+              <button className="add-category">
+                <FaFileLines color="#ffffff" size={15} />
+                <span>Bills</span>
+              </button>
               {billItems.length > 0 && (
                 <p
                   style={{
