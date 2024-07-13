@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useDispatch } from "react-redux";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { Modal, Button, Table, Form, Input, Select, message } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +14,7 @@ const ItemPage = () => {
   const [editItem, setEditItem] = useState(null);
   const [categories, setCategories] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [serialNumber, setSerialNumber] = useState(123);
+  const [serialNumber, setSerialNumber] = useState(0);
   const navigate = useNavigate();
 
   const getAllItems = async () => {
@@ -251,8 +247,9 @@ const ItemPage = () => {
             onFinish={handleSubmit}
           >
             <Form.Item name="serialNo" label="Serial No.">
+              <p style={{ display: "none" }}>{tempData[0].serialNo}</p>
               <Input
-                value={serialNumber}
+                value={Number(tempData[0].serialNo) + 1}
                 placeholder="Item serial no"
                 style={{ borderRadius: 5 }}
               />
