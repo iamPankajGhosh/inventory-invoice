@@ -232,6 +232,16 @@ const Homepage = () => {
             </div>
           </form>
         </div>
+
+        {openForm && (
+          <div
+            className="overlay"
+            style={{
+              zIndex: 9,
+            }}
+            onClick={() => setOpenForm(false)}
+          />
+        )}
       </div>
 
       <div className="category-outer">
