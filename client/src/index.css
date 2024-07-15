@@ -652,3 +652,19 @@ input:focus{
 .logout-popup button {
   font-size: 16px;
 }
+
+.action-btn-grp{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.action-btn{
+  background-color: #1e293b;
+  border: 2px solid #475569;
+}
+
+.action-btn:is(:focus,:hover){
+  background-color: #475569;
+}

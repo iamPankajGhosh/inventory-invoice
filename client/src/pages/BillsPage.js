@@ -1,14 +1,20 @@
 import React, { useEffect, useState, useRef } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useDispatch } from "react-redux";
-import { EyeOutlined, DeleteOutlined } from "@ant-design/icons";
 import { toWords } from "number-to-words";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import { Button, Table, message, Select, Form } from "antd";
 import BillLogo from "../assets/bill-logo.png";
 import "../styles/InvoiceStyles.css";
-import { FaFileLines, FaFilter, FaMagnifyingGlass } from "react-icons/fa6";
+import {
+  FaDownload,
+  FaEye,
+  FaFileLines,
+  FaFilter,
+  FaMagnifyingGlass,
+  FaTrashCan,
+} from "react-icons/fa6";
 
 const BillsPage = () => {
   const componentRef = useRef();
@@ -163,22 +169,28 @@ const BillsPage = () => {
       title: "Actions",
       dataIndex: "_id",
       render: (id, record) => (
-        <div>
-          <EyeOutlined
-            style={{ cursor: "pointer" }}
+        <div className="action-btn-grp">
+          <button
+            className="action-btn"
             onClick={() => {
               setSelectedBill(record);
               setPopupModal(true);
             }}
-          />
-
-          <DeleteOutlined
-            style={{ cursor: "pointer" }}
+          >
+            <FaEye size={20} />
+          </button>
+          {/* <button className="action-btn" onClick={() => {}}>
+            <FaDownload size={20} />
+          </button> */}
+          <button
+            className="action-btn"
             onClick={() => {
               console.log(record._id);
               handleDelete(record._id);
             }}
-          />
+          >
+            <FaTrashCan size={20} />
+          </button>
         </div>
       ),
     },
