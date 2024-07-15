@@ -77,15 +77,8 @@ const PreviousStockPage = () => {
   const columns = [
     { title: "Serial No.", dataIndex: "serialNo" },
     { title: "Name", dataIndex: "name" },
-    // {
-    //   title: "Image",
-    //   dataIndex: "image",
-    //   render: (image, record) => (
-    //     <img src={image} alt={record.name} height="60" width="60" />
-    //   ),
-    // },
-    // { title: "Price", dataIndex: "price" },
-    { title: "Price (Rs.)", dataIndex: "price" },
+    { title: "Cost Price (Rs.)", dataIndex: "price" },
+    { title: "Sell Price (Rs.)", dataIndex: "sellingPrice" },
     { title: "Quantity", dataIndex: "quantity" },
     {
       title: "Actions",
