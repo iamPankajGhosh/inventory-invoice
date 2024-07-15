@@ -625,3 +625,30 @@ input:focus{
   padding-block: 2em;
   font-family: "Krungthep",sans-serif;
 }
+
+.logout-popup{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  background-color: #334155;
+  border-radius: 6px;
+  padding: 20px;
+  z-index: 10;
+  transform: translate(-50%,-50%);
+}
+
+.logout-popup h4 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #f8fafc;
+}
+
+.logout-popup .grp-btn {
+  display: flex;
+  justify-content: center;
+  gap : 8px
+}
+
+.logout-popup button {
+  font-size: 16px;
+}
