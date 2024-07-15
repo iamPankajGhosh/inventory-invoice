@@ -17,12 +17,19 @@
 }
 
 .site-layout .site-layout-background {
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   background: #111827;
   overflow: auto;
   padding-inline: 20px;
   height: 70px;
   border-bottom: 1px solid #1e293b;
+}
+
+.site-layout-background p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 16px;
 }
 
 main {

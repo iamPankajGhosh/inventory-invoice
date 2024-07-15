@@ -12,6 +12,7 @@ import {
   FaFileLines,
   FaHouse,
   FaImagePortrait,
+  FaPlay,
 } from "react-icons/fa6";
 const { Header, Sider, Content } = Layout;
 
@@ -111,6 +112,10 @@ const DefaultLayout = ({ children }) => {
       </Sider>
       <Layout className="site-layout">
         <Header className="site-layout-background">
+          <p>
+            <FaPlay size={15} />
+            <span> Instruments for Every Melody</span>
+          </p>
           {/* {React.createElement(
             collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
             {
