@@ -247,10 +247,8 @@ const ItemPage = () => {
             onFinish={handleSubmit}
           >
             <Form.Item name="serialNo" label="Serial No.">
-              <p style={{ display: "none" }}>{tempData[0].serialNo}</p>
               <Input
-                value={Number(tempData[0].serialNo) + 1}
-                placeholder="Item serial no"
+                placeholder={`${tempData[0].serialNo}`}
                 style={{ borderRadius: 5 }}
               />
             </Form.Item>
