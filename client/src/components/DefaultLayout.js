@@ -19,6 +19,7 @@ const DefaultLayout = ({ children }) => {
   const navigate = useNavigate();
   const { billItems, loading } = useSelector((state) => state.rootReducer);
   const [collapsed, setCollapsed] = useState(false);
+  const [popUp, setPopUp] = useState(false);
 
   const toggle = () => {
     setCollapsed(!collapsed);
@@ -60,13 +61,43 @@ const DefaultLayout = ({ children }) => {
             key="/logout"
             icon={<FaArrowRightFromBracket size={20} />}
             onClick={() => {
-              localStorage.removeItem("auth");
-              navigate("/login");
+              setPopUp(true);
             }}
           >
             Logout
           </Menu.Item>
         </Menu>
+
+        {popUp && (
+          <div
+            className="overlay"
+            style={{ zIndex: 9, width: "100vw" }}
+            onClick={() => setPopUp(false)}
+          />
+        )}
+
+        {popUp && (
+          <div className="logout-popup">
+            <h4>Are you sure you want to logout?</h4>
+            <div className="grp-btn">
+              <button
+                className="btn btn-danger"
+                onClick={() => setPopUp(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-success"
+                onClick={() => {
+                  localStorage.removeItem("auth");
+                  navigate("/login");
+                }}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        )}
 
         <div
           className="text-center text-light font-wight-bold mb-4 b-0 w-100 position-absolute"
