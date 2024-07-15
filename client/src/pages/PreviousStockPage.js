@@ -5,7 +5,12 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { Modal, Button, Table, Form, Input, Select, message } from "antd";
 import { useNavigate } from "react-router-dom";
-import { FaAngleRight, FaCirclePlus } from "react-icons/fa6";
+import {
+  FaAngleRight,
+  FaCirclePlus,
+  FaPenToSquare,
+  FaTrashCan,
+} from "react-icons/fa6";
 const PreviousStockPage = () => {
   const dispatch = useDispatch();
   const [itemsData, setItemsData] = useState([]);
@@ -84,21 +89,27 @@ const PreviousStockPage = () => {
       title: "Actions",
       dataIndex: "_id",
       render: (id, record) => (
-        <div>
-          <EditOutlined
-            style={{ cursor: "pointer" }}
+        <div className="action-btn-grp">
+          <button
+            className="action-btn"
             onClick={() => {
               setEditItem(record);
               setPopupModal(true);
             }}
-          />
-          <DeleteOutlined
-            style={{ cursor: "pointer" }}
+          >
+            <FaPenToSquare size={20} />
+          </button>
+          {/* <button className="action-btn" onClick={() => {}}>
+                <FaDownload size={20} />
+              </button> */}
+          <button
+            className="action-btn"
             onClick={() => {
-              // notAllowed();
               handleDelete(record);
             }}
-          />
+          >
+            <FaTrashCan size={20} />
+          </button>
         </div>
       ),
     },
