@@ -269,111 +269,113 @@ const BillsPage = () => {
       <Table columns={columns} dataSource={billsData} bordered />
 
       {popupModal && (
-        <div className="overlay" onClick={() => setPopupModal(false)} />
-      )}
+        <>
+          <div className="overlay" onClick={() => setPopupModal(false)} />
 
-      <div className={`bill-popup ${popupModal && "active"}`}>
-        <div className="bill">
-          <h2>Bill Details</h2>
-          <div className="content" ref={componentRef}>
-            <div className="content-head-top">
-              <p>
-                <span style={{ color: "#000000", marginRight: "10px" }}>
-                  Bill No :{" "}
-                </span>
-                {selectedBill?.invoiceNumber}
-              </p>
-              <p>
-                <span style={{ color: "#000000", marginRight: "10px" }}>
-                  Data :{" "}
-                </span>
-                {selectedBill?.createdAt?.toString().substring(0, 10)}
-              </p>
+          <div className={`bill-popup ${popupModal && "active"}`}>
+            <div className="bill">
+              <h2>Bill Details</h2>
+              <div className="content" ref={componentRef}>
+                <div className="content-head-top">
+                  <p>
+                    <span style={{ color: "#000000", marginRight: "10px" }}>
+                      Bill No :{" "}
+                    </span>
+                    {selectedBill?.invoiceNumber}
+                  </p>
+                  <p>
+                    <span style={{ color: "#000000", marginRight: "10px" }}>
+                      Data :{" "}
+                    </span>
+                    {selectedBill?.createdAt?.toString().substring(0, 10)}
+                  </p>
+                </div>
+                <div className="content-head">
+                  <h1 className="title">MALLICK MUSICAL CO.</h1>
+                  <p className="sub-title">
+                    Seller & Repairer of Musical Instruments
+                  </p>
+                  <p className="address">
+                    38 Gariahat Road (S) Dhakuria Kolkata-700031
+                  </p>
+                  <p className="contact">
+                    Call : 9874314690 | Email: mallickmusical110&gmail.com
+                  </p>
+                </div>
+                <div className="customer-details">
+                  <p>
+                    <span style={{ color: "#000000", marginRight: "10px" }}>
+                      Customer Name :{" "}
+                    </span>
+                    {selectedBill?.customerName}
+                  </p>
+                  <p>
+                    <span style={{ color: "#000000", marginRight: "10px" }}>
+                      Customer Number :{" "}
+                    </span>
+                    {selectedBill?.customerNumber}
+                  </p>
+                </div>
+                <div className="invoice-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Serial No.</th>
+                        <th>Item Description</th>
+                        <th>Quantity</th>
+                        <th>Price (Rs.)</th>
+                        <th>Amount (Rs.)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedBill?.billItems?.map((item, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{item.name}</td>
+                          <td>{item.billQuantity}</td>
+                          <td>{item.sellingPrice}</td>
+                          <td>{item.billQuantity * item.sellingPrice}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="total">
+                  <p className="text-capitalize" style={{ maxWidth: 300 }}>
+                    <span style={{ color: "#000000" }}>Rupees in Words : </span>
+                    <br />
+                    {selectedBill &&
+                      toWords(selectedBill?.totalAmount.toFixed(2))}{" "}
+                    Rupees Only
+                  </p>
+                  <p style={{ fontSize: 18 }}>
+                    <span style={{ color: "#000000", marginRight: "10px" }}>
+                      Grand Total :
+                    </span>
+                    <br />
+                    Rs. {selectedBill?.totalAmount.toFixed(2)}
+                  </p>
+                </div>
+                <div className="logo">
+                  <p>E.&O.E.</p>
+                  <img src={BillLogo} height={30} alt="logo" />
+                </div>
+                <div className="footer">
+                  <p>Thank you for your business!</p>
+                </div>
+              </div>
             </div>
-            <div className="content-head">
-              <h1 className="title">MALLICK MUSICAL CO.</h1>
-              <p className="sub-title">
-                Seller & Repairer of Musical Instruments
-              </p>
-              <p className="address">
-                38 Gariahat Road (S) Dhakuria Kolkata-700031
-              </p>
-              <p className="contact">
-                Call : 9874314690 | Email: mallickmusical110&gmail.com
-              </p>
-            </div>
-            <div className="customer-details">
-              <p>
-                <span style={{ color: "#000000", marginRight: "10px" }}>
-                  Customer Name :{" "}
-                </span>
-                {selectedBill?.customerName}
-              </p>
-              <p>
-                <span style={{ color: "#000000", marginRight: "10px" }}>
-                  Customer Number :{" "}
-                </span>
-                {selectedBill?.customerNumber}
-              </p>
-            </div>
-            <div className="invoice-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Serial No.</th>
-                    <th>Item Description</th>
-                    <th>Quantity</th>
-                    <th>Price (Rs.)</th>
-                    <th>Amount (Rs.)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedBill?.billItems?.map((item, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{item.name}</td>
-                      <td>{item.billQuantity}</td>
-                      <td>{item.sellingPrice}</td>
-                      <td>{item.billQuantity * item.sellingPrice}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="total">
-              <p className="text-capitalize" style={{ maxWidth: 300 }}>
-                <span style={{ color: "#000000" }}>Rupees in Words : </span>
-                <br />
-                {selectedBill &&
-                  toWords(selectedBill?.totalAmount.toFixed(2))}{" "}
-                Rupees Only
-              </p>
-              <p style={{ fontSize: 18 }}>
-                <span style={{ color: "#000000", marginRight: "10px" }}>
-                  Grand Total :
-                </span>
-                <br />
-                Rs. {selectedBill?.totalAmount.toFixed(2)}
-              </p>
-            </div>
-            <div className="logo">
-              <p>E.&O.E.</p>
-              <img src={BillLogo} height={30} alt="logo" />
-            </div>
-            <div className="footer">
-              <p>Thank you for your business!</p>
-            </div>
+            <button
+              onClick={() => {
+                console.log(selectedBill);
+                handlePrint();
+              }}
+            >
+              Print
+            </button>
           </div>
-        </div>
-        <button
-          onClick={() => {
-            console.log(selectedBill);
-            handlePrint();
-          }}
-        >
-          Print
-        </button>
-      </div>
+        </>
+      )}
     </DefaultLayout>
   );
 };

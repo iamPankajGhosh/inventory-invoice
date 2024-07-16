@@ -625,6 +625,10 @@ input:focus{
   font-family: "Krungthep",sans-serif;
 }
 
+.content p {
+  color: #44403c !important;
+}
+
 .logout-popup{
   position: fixed;
   top: 50%;
