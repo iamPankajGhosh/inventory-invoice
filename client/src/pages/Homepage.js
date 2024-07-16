@@ -39,8 +39,8 @@ const Homepage = () => {
     data.forEach((item) => {
       const isDuplicate = filteredBrandList.some(
         (existingItem) =>
-          existingItem.category === item.category &&
-          existingItem.brand === item.brand
+          existingItem.brand === item.brand &&
+          existingItem.category === item.category
       );
 
       if (!isDuplicate) {
@@ -51,6 +51,7 @@ const Homepage = () => {
       }
     });
 
+    console.log(filteredBrandList);
     setBrands(filteredBrandList);
   };
 
@@ -199,8 +200,22 @@ const Homepage = () => {
                   .filter((item) =>
                     selecedCategory === "all"
                       ? true
-                      : selecedCategory === item.category
+                      : item.category === selecedCategory
                   )
+                  .reduce((uniqueBrands, item) => {
+                    if (selecedCategory === "all") {
+                      if (
+                        !uniqueBrands.some(
+                          (brand) => brand.brand === item.brand
+                        )
+                      ) {
+                        uniqueBrands.push(item);
+                      }
+                    } else {
+                      uniqueBrands.push(item);
+                    }
+                    return uniqueBrands;
+                  }, [])
                   .map((item, index) => (
                     <Select.Option
                       key={index}
