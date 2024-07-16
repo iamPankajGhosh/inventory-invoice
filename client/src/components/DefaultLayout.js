@@ -91,6 +91,7 @@ const DefaultLayout = ({ children }) => {
                 className="btn btn-success"
                 onClick={() => {
                   localStorage.removeItem("auth");
+                  localStorage.removeItem("token");
                   navigate("/login");
                 }}
               >

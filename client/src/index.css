@@ -671,3 +671,47 @@ input:focus{
 .action-btn:is(:focus,:hover){
   background-color: #475569;
 }
+
+.stock-login-form-outer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  gap: 10px;
+}
+
+.stock-login-form-outer h1 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.stock-login-form {
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+  background-color: #1e293b;
+  padding: 20px;
+  border-radius: 6px;
+  gap: 10px;
+}
+
+.stock-login-form label {
+  color: #f8fafc;
+}
+
+.stock-login-form input {
+  border-radius: 6px;
+  font-size: 16px;
+  border: 2px solid #64748b;
+  background-color: #f8fafc;
+}
+
+.stock-login-form button {
+  background-color: #2f81f7;
+  margin-block: 5px;
+}
+
+.stock-login-form p {
+  color: #ef4444 !important;
+  text-align: center;
+}

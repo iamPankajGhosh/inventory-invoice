@@ -10,7 +10,9 @@ import {
   FaMagnifyingGlass,
   FaPenToSquare,
   FaTrashCan,
+  FaC,
 } from "react-icons/fa6";
+import { useForm } from "react-hook-form";
 const ItemPage = () => {
   const dispatch = useDispatch();
   const [itemsData, setItemsData] = useState([]);
@@ -20,7 +22,36 @@ const ItemPage = () => {
   const [categories, setCategories] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [serialNumber, setSerialNumber] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isAuth, setIsAuth] = useState(false);
+  const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
+
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/api/users/stock/login`,
+        {
+          name: "stockHandler",
+          ...data,
+        }
+      );
+      console.log(res.data.message);
+      if (!res.data?.verified) {
+        setIsLoading(false);
+        return setErrorMessage(res.data.message);
+      }
+      localStorage.setItem("token", res.data?._id);
+      setIsAuth(true);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setErrorMessage("Failed to login");
+      setIsLoading(false);
+    }
+  };
 
   const getAllItems = async () => {
     try {
@@ -57,6 +88,11 @@ const ItemPage = () => {
   useEffect(() => {
     getAllItems();
     getAllCategories();
+
+    if (localStorage.getItem("token")) {
+      setIsAuth(true);
+      navigate("/items");
+    }
   }, []);
 
   useEffect(() => {
@@ -145,7 +181,7 @@ const ItemPage = () => {
   ];
 
   // handle form  submit
-  const handleSubmit = async (value) => {
+  const handleSubmitItem = async (value) => {
     if (editItem === null) {
       const findItemBySerialNumber = tempData.filter(
         (item) => item.serialNo === value.serialNo
@@ -200,105 +236,136 @@ const ItemPage = () => {
 
   return (
     <DefaultLayout>
-      <div className="header">
-        {/* Header */}
-        <h2>Stock</h2>
+      {isAuth ? (
+        <div>
+          <div className="header">
+            {/* Header */}
+            <h2>Stock</h2>
 
-        <button
-          className="add-category"
-          onClick={() => navigate("/items/previous-stock")}
-        >
-          <FaAngleLeft color="#ffffff" size={20} />
-          <span>Previous stock</span>
-        </button>
+            <button
+              className="add-category"
+              onClick={() => navigate("/items/previous-stock")}
+            >
+              <FaAngleLeft color="#ffffff" size={20} />
+              <span>Previous stock</span>
+            </button>
 
-        {/* Search Bar */}
-        <div className="searchbar">
-          <input
-            type="text"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value.trim())}
-            placeholder="Item name"
-            className="search-field"
-          />
-          <button
-            className="search-btn"
-            onClick={() => handleSearch(searchValue)}
-          >
-            <FaMagnifyingGlass size={20} />
-          </button>
-        </div>
-
-        <button
-          className="add-category"
-          onClick={() => {
-            setPopupModal(true);
-          }}
-        >
-          <FaCirclePlus color="#ffffff" size={20} />
-          <span>Item</span>
-        </button>
-      </div>
-
-      <Table columns={columns} dataSource={itemsData} bordered />
-
-      {popupModal && (
-        <Modal
-          title={`${editItem !== null ? "Edit Item " : "Add New Item"}`}
-          visible={popupModal}
-          onCancel={() => {
-            setEditItem(null);
-            setPopupModal(false);
-          }}
-          footer={false}
-        >
-          <Form
-            layout="vertical"
-            initialValues={editItem}
-            onFinish={handleSubmit}
-          >
-            <Form.Item name="serialNo" label="Serial No.">
-              <Input
-                placeholder={`${tempData[0].serialNo}`}
-                style={{ borderRadius: 5 }}
+            {/* Search Bar */}
+            <div className="searchbar">
+              <input
+                type="text"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value.trim())}
+                placeholder="Item name"
+                className="search-field"
               />
-            </Form.Item>
-            <Form.Item name="name" label="Name">
-              <Input placeholder="Item name" style={{ borderRadius: 5 }} />
-            </Form.Item>
-            <Form.Item name="category" label="Category">
-              <Select placeholder="Select category">
-                {categories.map((c) => (
-                  <Select.Option
-                    key={c._id}
-                    value={c.name}
-                    className="text-capitalize"
-                  >
-                    {c.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item name="brand" label="Brand">
-              <Input placeholder="Item brand" style={{ borderRadius: 5 }} />
-            </Form.Item>
-            <Form.Item name="price" label="Cost Price">
-              <Input placeholder="Item cost" style={{ borderRadius: 5 }} />
-            </Form.Item>
-            <Form.Item name="sellingPrice" label="Sell Price">
-              <Input placeholder="Item cost" style={{ borderRadius: 5 }} />
-            </Form.Item>
-            <Form.Item name="quantity" label="Quantity">
-              <Input placeholder="Item quantity" style={{ borderRadius: 5 }} />
-            </Form.Item>
-
-            <div className="d-flex justify-content-end">
-              <Button type="primary" htmlType="submit">
-                SAVE
-              </Button>
+              <button
+                className="search-btn"
+                onClick={() => handleSearch(searchValue)}
+              >
+                <FaMagnifyingGlass size={20} />
+              </button>
             </div>
-          </Form>
-        </Modal>
+
+            <button
+              className="add-category"
+              onClick={() => {
+                setPopupModal(true);
+              }}
+            >
+              <FaCirclePlus color="#ffffff" size={20} />
+              <span>Item</span>
+            </button>
+          </div>
+
+          <Table columns={columns} dataSource={itemsData} bordered />
+
+          {popupModal && (
+            <Modal
+              title={`${editItem !== null ? "Edit Item " : "Add New Item"}`}
+              visible={popupModal}
+              onCancel={() => {
+                setEditItem(null);
+                setPopupModal(false);
+              }}
+              footer={false}
+            >
+              <Form
+                layout="vertical"
+                initialValues={editItem}
+                onFinish={handleSubmitItem}
+              >
+                <Form.Item name="serialNo" label="Serial No.">
+                  <Input
+                    placeholder={`${tempData[0].serialNo}`}
+                    style={{ borderRadius: 5 }}
+                  />
+                </Form.Item>
+                <Form.Item name="name" label="Name">
+                  <Input placeholder="Item name" style={{ borderRadius: 5 }} />
+                </Form.Item>
+                <Form.Item name="category" label="Category">
+                  <Select placeholder="Select category">
+                    {categories.map((c) => (
+                      <Select.Option
+                        key={c._id}
+                        value={c.name}
+                        className="text-capitalize"
+                      >
+                        {c.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item name="brand" label="Brand">
+                  <Input placeholder="Item brand" style={{ borderRadius: 5 }} />
+                </Form.Item>
+                <Form.Item name="price" label="Cost Price">
+                  <Input placeholder="Item cost" style={{ borderRadius: 5 }} />
+                </Form.Item>
+                <Form.Item name="sellingPrice" label="Sell Price">
+                  <Input placeholder="Item cost" style={{ borderRadius: 5 }} />
+                </Form.Item>
+                <Form.Item name="quantity" label="Quantity">
+                  <Input
+                    placeholder="Item quantity"
+                    style={{ borderRadius: 5 }}
+                  />
+                </Form.Item>
+
+                <div className="d-flex justify-content-end">
+                  <Button type="primary" htmlType="submit">
+                    SAVE
+                  </Button>
+                </div>
+              </Form>
+            </Modal>
+          )}
+        </div>
+      ) : (
+        <div className="stock-login-form-outer">
+          <h1>Stock</h1>
+          <form onSubmit={handleSubmit(onSubmit)} className="stock-login-form">
+            <label htmlFor="userId">User Id</label>
+            <input id="userId" {...register("userId")} placeholder="User Id" />
+
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              {...register("password")}
+              placeholder="Password"
+            />
+            <p>{errorMessage}</p>
+            <button type="submit">
+              {isLoading ? (
+                <FaC size={20} className="loader" />
+              ) : (
+                <span>Log In</span>
+              )}
+            </button>
+          </form>
+        </div>
       )}
     </DefaultLayout>
   );

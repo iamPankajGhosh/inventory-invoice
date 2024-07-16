@@ -30,7 +30,24 @@ const registerController = async (req, res) => {
   }
 };
 
+// stock login
+const stockLoginController = async (req, res) => {
+  try {
+    const { name, userId, password } = req.body;
+    const user = await userModal.findOne({ name });
+
+    if (user.userId !== userId || user.password !== password) {
+      return res.json({ message: "Invalid credentials" });
+    }
+
+    res.status(200).send(user);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   loginController,
   registerController,
+  stockLoginController,
 };
