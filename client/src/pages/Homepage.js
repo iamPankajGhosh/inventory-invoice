@@ -33,6 +33,32 @@ const Homepage = () => {
     );
   };
 
+  const getCategoryWiseBrandList = (data) => {
+    let filteredBrandList = [
+      {
+        category: "all",
+        brand: "all",
+      },
+    ];
+
+    data.forEach((item) => {
+      const isDuplicate = filteredBrandList.some(
+        (existingItem) =>
+          existingItem.category === item.category &&
+          existingItem.brand === item.brand
+      );
+
+      if (!isDuplicate) {
+        filteredBrandList.push({
+          category: item.category,
+          brand: item.brand,
+        });
+      }
+    });
+
+    setBrands(filteredBrandList);
+  };
+
   useEffect(() => {
     if (searchValue === "") {
       setItemsData(tempData);
@@ -69,7 +95,7 @@ const Homepage = () => {
       );
       setTempData(data.filter((item) => item.quantity !== 0));
       setItemsData(data);
-      setBrands(["all", ...new Set(data.map((item) => item.brand))]);
+      getCategoryWiseBrandList(data.filter((item) => item.quantity !== 0));
       dispatch({ type: "HIDE_LOADING" });
     } catch (error) {
       console.log(error);
@@ -167,15 +193,21 @@ const Homepage = () => {
                 onChange={(value) => setSelectedBrand(value)}
                 className="text-capitalize"
               >
-                {brands.map((brand, index) => (
-                  <Select.Option
-                    key={index}
-                    value={brand}
-                    className="text-capitalize"
-                  >
-                    {brand}
-                  </Select.Option>
-                ))}
+                {brands
+                  .filter((item) =>
+                    selecedCategory === "all"
+                      ? true
+                      : selecedCategory === item.category
+                  )
+                  .map((item, index) => (
+                    <Select.Option
+                      key={index}
+                      value={item.brand}
+                      className="text-capitalize"
+                    >
+                      {item.brand}
+                    </Select.Option>
+                  ))}
               </Select>
             </Form.Item>
             <Button htmlType="submit" type="primary" className="filter-btn">
