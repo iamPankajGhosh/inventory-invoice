@@ -8,7 +8,7 @@ import {
   FaCirclePlus,
   FaFilter,
   FaMagnifyingGlass,
-  FaTrash,
+  FaTrashCan,
 } from "react-icons/fa6";
 import { Button, Form, message, Select } from "antd";
 const Homepage = () => {
@@ -274,7 +274,7 @@ const Homepage = () => {
                       handleDeleteCategory(category._id);
                     }}
                   >
-                    <FaTrash size={20} />
+                    <FaTrashCan size={20} />
                   </button>
                 </div>
               ))}
