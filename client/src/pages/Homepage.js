@@ -34,12 +34,7 @@ const Homepage = () => {
   };
 
   const getCategoryWiseBrandList = (data) => {
-    let filteredBrandList = [
-      {
-        category: "all",
-        brand: "all",
-      },
-    ];
+    let filteredBrandList = [];
 
     data.forEach((item) => {
       const isDuplicate = filteredBrandList.some(
@@ -193,6 +188,13 @@ const Homepage = () => {
                 onChange={(value) => setSelectedBrand(value)}
                 className="text-capitalize"
               >
+                <Select.Option
+                  key="all"
+                  value="all"
+                  className="text-capitalize"
+                >
+                  all
+                </Select.Option>
                 {brands
                   .filter((item) =>
                     selecedCategory === "all"
