@@ -715,3 +715,57 @@ input:focus{
   color: #ef4444 !important;
   text-align: center;
 }
+
+.add-item-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  padding: 20px;
+  margin-top: -20px;
+  background-color: #334155;
+  border-radius: 6px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -50%);
+  transition: 200ms ease-in-out;
+}
+
+.add-item-form.active{
+  margin-top: 0;
+  opacity: 1;
+  visibility: visible;
+}
+
+.add-item-form label{
+  color: #f8fafc;
+  font-weight: 500;
+}
+
+.add-item-form input{
+  border-radius: 6px;
+  margin-bottom: 8px;
+  background-color: #e2e8f0;
+}
+
+.add-item-form select {
+  border-radius: 6px;
+  height: 35px;
+  padding-inline: 5px;
+  background-color: #e2e8f0;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.add-item-form select:focus{
+  outline: none;
+}
+
+.add-item-form button {
+  background-color: #2f81f7;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 8px;
+}

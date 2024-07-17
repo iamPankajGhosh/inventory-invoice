@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { Modal, Button, Table, Form, Input, Select, message } from "antd";
+import { Table, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
   FaAngleLeft,
@@ -21,14 +21,24 @@ const ItemPage = () => {
   const [editItem, setEditItem] = useState(null);
   const [categories, setCategories] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [serialNumber, setSerialNumber] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isAuth, setIsAuth] = useState(false);
-  const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
 
-  const onSubmit = async (data) => {
+  const stockLoginForm = useForm();
+  const addItemForm = useForm({
+    defaultValues: {
+      name: "",
+      category: "",
+      brand: "",
+      price: "",
+      sellingPrice: "",
+      quantity: "",
+    },
+  });
+
+  const handleStockLogin = async (data) => {
     setIsLoading(true);
     try {
       const res = await axios.post(
@@ -62,6 +72,7 @@ const ItemPage = () => {
         `${process.env.REACT_APP_SERVER_URL}/api/items/get-item`
       );
       setTempData(data);
+      addItemForm.setValue("serialNo", Number(data[0]?.serialNo) + 1);
       setItemsData(data.filter((item) => item.quantity !== 0));
       dispatch({ type: "HIDE_LOADING" });
     } catch (error) {
@@ -88,7 +99,6 @@ const ItemPage = () => {
   useEffect(() => {
     getAllItems();
     getAllCategories();
-
     if (localStorage.getItem("token")) {
       setIsAuth(true);
       navigate("/items");
@@ -139,14 +149,6 @@ const ItemPage = () => {
   const columns = [
     { title: "Serial No.", dataIndex: "serialNo" },
     { title: "Name", dataIndex: "name" },
-    // {
-    //   title: "Image",
-    //   dataIndex: "image",
-    //   render: (image, record) => (
-    //     <img src={image} alt={record.name} height="60" width="60" />
-    //   ),
-    // },
-    // { title: "Price", dataIndex: "price" },
     { title: "Cost Price (Rs.)", dataIndex: "price" },
     { title: "Sell Price (Rs.)", dataIndex: "sellingPrice" },
     { title: "Quantity", dataIndex: "quantity" },
@@ -158,15 +160,12 @@ const ItemPage = () => {
           <button
             className="action-btn"
             onClick={() => {
-              setEditItem(record);
+              // setEditItem(record);
               setPopupModal(true);
             }}
           >
             <FaPenToSquare size={20} />
           </button>
-          {/* <button className="action-btn" onClick={() => {}}>
-                  <FaDownload size={20} />
-                </button> */}
           <button
             className="action-btn"
             onClick={() => {
@@ -181,53 +180,61 @@ const ItemPage = () => {
   ];
 
   // handle form  submit
-  const handleSubmitItem = async (value) => {
+  const addItemHandler = async (data) => {
+    setIsLoading(true);
+    const itemValue = { ...data };
+
+    const findItemBySerialNumber = tempData.filter(
+      (item) => item.serialNo === itemValue.serialNo
+    );
+
+    if (findItemBySerialNumber.length > 0) {
+      setIsLoading(false);
+      return message.error("Serial Number already exists");
+    }
+
+    if (Object.values(itemValue).some((item) => item === "")) {
+      setIsLoading(false);
+      return message.error("Please fill all the fields");
+    }
+
+    console.log(itemValue);
     if (editItem === null) {
-      const findItemBySerialNumber = tempData.filter(
-        (item) => item.serialNo === value.serialNo
-      );
-
-      if (findItemBySerialNumber.length > 0) {
-        return message.error("Serial Number already exists");
-      }
-
       try {
-        dispatch({
-          type: "SHOW_LOADING",
-        });
+        setIsLoading(true);
         const res = await axios.post(
           `${process.env.REACT_APP_SERVER_URL}/api/items/add-item`,
-          value
+          itemValue
         );
         console.log(res.data);
         message.success("Item Added Succesfully");
+        addItemForm.reset();
         getAllItems();
         setPopupModal(false);
-        dispatch({ type: "HIDE_LOADING" });
+        setIsLoading(false);
       } catch (error) {
-        dispatch({ type: "HIDE_LOADING" });
+        setIsLoading(false);
         message.error("Failed to add item");
         console.log(error);
       }
     } else {
       try {
-        dispatch({
-          type: "SHOW_LOADING",
-        });
+        setIsLoading(true);
         const res = await axios.post(
           `${process.env.REACT_APP_SERVER_URL}/api/items/edit-item`,
           {
-            ...value,
+            ...itemValue,
             itemId: editItem._id,
           }
         );
         message.success("Item Updated Succesfully");
+        addItemForm.reset();
         console.log(res.data);
         getAllItems();
         setPopupModal(false);
-        dispatch({ type: "HIDE_LOADING" });
+        setIsLoading(false);
       } catch (error) {
-        dispatch({ type: "HIDE_LOADING" });
+        setIsLoading(false);
         message.error("Failed to update item");
         console.log(error);
       }
@@ -281,79 +288,96 @@ const ItemPage = () => {
           <Table columns={columns} dataSource={itemsData} bordered />
 
           {popupModal && (
-            <Modal
-              title={`${editItem !== null ? "Edit Item " : "Add New Item"}`}
-              visible={popupModal}
-              onCancel={() => {
-                setEditItem(null);
-                setPopupModal(false);
-              }}
-              footer={false}
-            >
-              <Form
-                layout="vertical"
-                initialValues={editItem}
-                onFinish={handleSubmitItem}
-              >
-                <Form.Item name="serialNo" label="Serial No.">
-                  <Input
-                    placeholder={`${tempData[0].serialNo}`}
-                    style={{ borderRadius: 5 }}
-                  />
-                </Form.Item>
-                <Form.Item name="name" label="Name">
-                  <Input placeholder="Item name" style={{ borderRadius: 5 }} />
-                </Form.Item>
-                <Form.Item name="category" label="Category">
-                  <Select placeholder="Select category">
-                    {categories.map((c) => (
-                      <Select.Option
-                        key={c._id}
-                        value={c.name}
-                        className="text-capitalize"
-                      >
-                        {c.name}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-                <Form.Item name="brand" label="Brand">
-                  <Input placeholder="Item brand" style={{ borderRadius: 5 }} />
-                </Form.Item>
-                <Form.Item name="price" label="Cost Price">
-                  <Input placeholder="Item cost" style={{ borderRadius: 5 }} />
-                </Form.Item>
-                <Form.Item name="sellingPrice" label="Sell Price">
-                  <Input placeholder="Item cost" style={{ borderRadius: 5 }} />
-                </Form.Item>
-                <Form.Item name="quantity" label="Quantity">
-                  <Input
-                    placeholder="Item quantity"
-                    style={{ borderRadius: 5 }}
-                  />
-                </Form.Item>
-
-                <div className="d-flex justify-content-end">
-                  <Button type="primary" htmlType="submit">
-                    SAVE
-                  </Button>
-                </div>
-              </Form>
-            </Modal>
+            <div className="overlay" onClick={() => setPopupModal(false)} />
           )}
+
+          <form
+            onSubmit={addItemForm.handleSubmit(addItemHandler)}
+            className={`add-item-form ${popupModal && "active"}`}
+          >
+            <label htmlFor="serialNo">Serial No.</label>
+            <input
+              id="serialNo"
+              placeholder="Item serial no."
+              {...addItemForm.register("serialNo")}
+            />
+
+            <label htmlFor="name">Name</label>
+            <input
+              id="name"
+              placeholder="Item name"
+              {...addItemForm.register("name")}
+            />
+
+            <label htmlFor="category">Category</label>
+            <select
+              id="category"
+              placeholder="Item category"
+              {...addItemForm.register("category")}
+            >
+              <option value="">Select Category</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+
+            <label htmlFor="brand">Brand</label>
+            <input
+              id="brand"
+              placeholder="Item brand"
+              {...addItemForm.register("brand")}
+            />
+
+            <label htmlFor="price">Cost Price</label>
+            <input
+              id="price"
+              placeholder="Item cost price"
+              {...addItemForm.register("price")}
+            />
+
+            <label htmlFor="sellingPrice">Sell Price</label>
+            <input
+              id="sellingPrice"
+              placeholder="Item sell price"
+              {...addItemForm.register("sellingPrice")}
+            />
+
+            <label htmlFor="quantity">Quantity</label>
+            <input
+              id="quantity"
+              placeholder="Item quantity"
+              {...addItemForm.register("quantity")}
+            />
+            <button type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <FaC size={20} className="loader" />
+              ) : (
+                <span>Submit</span>
+              )}
+            </button>
+          </form>
         </div>
       ) : (
         <div className="stock-login-form-outer">
           <h1>Stock</h1>
-          <form onSubmit={handleSubmit(onSubmit)} className="stock-login-form">
+          <form
+            onSubmit={stockLoginForm.handleSubmit(handleStockLogin)}
+            className="stock-login-form"
+          >
             <label htmlFor="userId">User Id</label>
-            <input id="userId" {...register("userId")} placeholder="User Id" />
+            <input
+              id="userId"
+              {...stockLoginForm.register("userId")}
+              placeholder="User Id"
+            />
 
             <label htmlFor="password">Password</label>
             <input
               id="password"
               type="password"
-              {...register("password")}
+              {...stockLoginForm.register("password")}
               placeholder="Password"
             />
             <p>{errorMessage}</p>
