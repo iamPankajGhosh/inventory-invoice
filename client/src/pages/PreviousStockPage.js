@@ -93,18 +93,6 @@ const PreviousStockPage = () => {
           <button
             className="action-btn"
             onClick={() => {
-              setEditItem(record);
-              setPopupModal(true);
-            }}
-          >
-            <FaPenToSquare size={20} />
-          </button>
-          {/* <button className="action-btn" onClick={() => {}}>
-                <FaDownload size={20} />
-              </button> */}
-          <button
-            className="action-btn"
-            onClick={() => {
               handleDelete(record);
             }}
           >
