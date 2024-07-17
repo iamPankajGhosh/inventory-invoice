@@ -8,13 +8,6 @@ const addBillsController = async (req, res) => {
     const newBill = new billsModel(req.body);
     await newBill.save();
 
-    const timestamp = newBill.createdAt;
-    const date = new Date(timestamp);
-    const billMonth = date
-      .toLocaleString("default", { month: "long" })
-      .toLowerCase();
-    const billYear = date.getFullYear();
-
     // update quantity in items
     await newBill.billItems.forEach(async (item) => {
       await itemModel.updateOne(
@@ -30,17 +23,34 @@ const addBillsController = async (req, res) => {
     });
 
     // update profit report
-    const profitReport = await ProfitReport.findOne({
-      month: billMonth,
-      year: billYear,
+    console.log(newBill);
+    const findProfitReportByMonthAndYear = await ProfitReport.findOne({
+      month: new Date(newBill.createdAt)
+        .toLocaleString("default", {
+          month: "long",
+        })
+        .toLowerCase(),
+      year: new Date(newBill.createdAt).getFullYear(),
     });
-    if (profitReport) {
-      profitReport.revenue += newBill.totalAmount;
-      profitReport.profit = Number(
-        profitReport.revenue - profitReport.expenses
-      ).toFixed(2);
-      await profitReport.save();
+
+    if (!findProfitReportByMonthAndYear) {
+      await ProfitReport.create({
+        month: new Date(newBill.createdAt)
+          .toLocaleString("default", {
+            month: "long",
+          })
+          .toLowerCase(),
+        year: new Date(newBill.createdAt).getFullYear(),
+        revenue: newBill.totalAmount,
+        expenses: 0,
+        profit: newBill.totalAmount - newBill.totalCostAmount,
+      });
     }
+
+    findProfitReportByMonthAndYear.revenue += newBill.totalAmount;
+    findProfitReportByMonthAndYear.profit +=
+      newBill.totalAmount - newBill.totalCostAmount;
+    await findProfitReportByMonthAndYear.save();
 
     res.send("Bill Created Successfully!");
   } catch (error) {

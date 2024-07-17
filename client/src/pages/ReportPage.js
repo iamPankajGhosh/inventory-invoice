@@ -44,8 +44,7 @@ const ReportPage = () => {
     { title: "Revenue", dataIndex: "revenue" },
     {
       title: "Profit",
-      dataIndex: "_id",
-      render: (id, record) => <div>{record.profit.toFixed(2)}</div>,
+      dataIndex: "profit",
     },
   ];
 

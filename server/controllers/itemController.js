@@ -38,8 +38,6 @@ const addItemController = async (req, res) => {
         month: addItemsMonth,
         year: addItemsYear,
         expenses: newItem.price * newItem.quantity,
-        revenue: 0,
-        profit: 0,
       });
       await newProfitReport.save();
       console.log(newProfitReport);
@@ -48,11 +46,6 @@ const addItemController = async (req, res) => {
 
     //update expenses
     findExpensesByMonthAndYear.expenses += newItem.price * newItem.quantity;
-    //update profit
-    findExpensesByMonthAndYear.profit = (
-      findExpensesByMonthAndYear.revenue - findExpensesByMonthAndYear.expenses
-    ).toFixed(2);
-
     await findExpensesByMonthAndYear.save();
 
     res.status(201).send(`Item created`);
@@ -91,10 +84,6 @@ const editItemController = async (req, res) => {
       updatedStockItem.quantity * updatedStockItem.price;
     findExpensesByMonthAndYear.expenses += req.body.quantity * req.body.price;
 
-    //update profit
-    findExpensesByMonthAndYear.profit = (
-      findExpensesByMonthAndYear.revenue - findExpensesByMonthAndYear.expenses
-    ).toFixed(2);
     await findExpensesByMonthAndYear.save();
 
     // update stock price and quantity

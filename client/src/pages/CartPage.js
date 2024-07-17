@@ -182,12 +182,15 @@ const CartPage = () => {
         subTotal,
         tax:
           subTotal === 0 ? 0 : parseFloat(((subTotal / 100) * 18).toFixed(2)),
-
+        totalCostAmount: billItems.reduce(
+          (acc, curr) => acc + curr.billQuantity * Number(curr.price),
+          0
+        ),
         totalAmount:
           subTotal === 0
             ? 0
             : // : parseFloat((subTotal + (subTotal / 100) * 18).toFixed(2)),
-              parseFloat(subTotal.toFixed(2)),
+              parseFloat(Number(subTotal).toFixed(2)),
         userId: JSON.parse(localStorage.getItem("auth"))._id,
       };
 

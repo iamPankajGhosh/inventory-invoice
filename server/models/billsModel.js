@@ -18,6 +18,10 @@ const billSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    totalCostAmount: {
+      type: Number,
+      required: true,
+    },
     subTotal: {
       type: Number,
       required: true,

@@ -4,9 +4,9 @@ const profitReportSchema = new mongoose.Schema(
   {
     month: { type: String, required: true },
     year: { type: Number, required: true },
-    revenue: { type: Number, required: true, default: 0 },
-    expenses: { type: Number, required: true, default: 0 },
-    profit: { type: Number },
+    revenue: { type: Number, default: 0 },
+    expenses: { type: Number, default: 0 },
+    profit: { type: Number, default: 0 },
   },
   {
     timestamps: true,
