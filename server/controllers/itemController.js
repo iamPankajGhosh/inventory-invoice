@@ -59,7 +59,6 @@ const addItemController = async (req, res) => {
 const editItemController = async (req, res) => {
   try {
     const { itemId } = req.body;
-    console.log(itemId);
     const updatedStockItem = await itemModel.findOne({ _id: itemId });
 
     //update item

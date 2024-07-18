@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -18,7 +18,7 @@ const ItemPage = () => {
   const [itemsData, setItemsData] = useState([]);
   const [tempData, setTempData] = useState([]);
   const [popupModal, setPopupModal] = useState(false);
-  const [editItem, setEditItem] = useState(null);
+  const [editItem, setEditItem] = useState(false);
   const [categories, setCategories] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -160,7 +160,15 @@ const ItemPage = () => {
           <button
             className="action-btn"
             onClick={() => {
-              // setEditItem(record);
+              setEditItem(true);
+              addItemForm.setValue("itemId", record._id);
+              addItemForm.setValue("serialNo", record.serialNo);
+              addItemForm.setValue("name", record.name);
+              addItemForm.setValue("category", record.category);
+              addItemForm.setValue("brand", record.brand);
+              addItemForm.setValue("price", record.price);
+              addItemForm.setValue("sellingPrice", record.sellingPrice);
+              addItemForm.setValue("quantity", record.quantity);
               setPopupModal(true);
             }}
           >
@@ -182,24 +190,23 @@ const ItemPage = () => {
   // handle form  submit
   const addItemHandler = async (data) => {
     setIsLoading(true);
-    const itemValue = { ...data };
-
-    const findItemBySerialNumber = tempData.filter(
-      (item) => item.serialNo === itemValue.serialNo
-    );
-
-    if (findItemBySerialNumber.length > 0) {
-      setIsLoading(false);
-      return message.error("Serial Number already exists");
-    }
+    const itemValue = data;
 
     if (Object.values(itemValue).some((item) => item === "")) {
       setIsLoading(false);
       return message.error("Please fill all the fields");
     }
 
-    console.log(itemValue);
-    if (editItem === null) {
+    if (!editItem) {
+      const findItemBySerialNumber = tempData.filter(
+        (item) => item.serialNo === itemValue.serialNo
+      );
+
+      if (findItemBySerialNumber.length > 0) {
+        setIsLoading(false);
+        return message.error("Serial Number already exists");
+      }
+
       try {
         setIsLoading(true);
         const res = await axios.post(
@@ -220,17 +227,16 @@ const ItemPage = () => {
     } else {
       try {
         setIsLoading(true);
+
         const res = await axios.post(
           `${process.env.REACT_APP_SERVER_URL}/api/items/edit-item`,
-          {
-            ...itemValue,
-            itemId: editItem._id,
-          }
+          itemValue
         );
         message.success("Item Updated Succesfully");
         addItemForm.reset();
-        console.log(res.data);
+
         getAllItems();
+        setEditItem(false);
         setPopupModal(false);
         setIsLoading(false);
       } catch (error) {
