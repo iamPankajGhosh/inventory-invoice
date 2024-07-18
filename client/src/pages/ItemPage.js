@@ -72,7 +72,10 @@ const ItemPage = () => {
         `${process.env.REACT_APP_SERVER_URL}/api/items/get-item`
       );
       setTempData(data);
-      addItemForm.setValue("serialNo", Number(data[0]?.serialNo) + 1);
+      addItemForm.setValue(
+        "serialNo",
+        data.length > 0 ? Number(data[0]?.serialNo) + 1 : 101
+      );
       setItemsData(data.filter((item) => item.quantity !== 0));
       dispatch({ type: "HIDE_LOADING" });
     } catch (error) {
