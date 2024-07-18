@@ -10,6 +10,7 @@ import {
   MinusCircleOutlined,
 } from "@ant-design/icons";
 import { Table, Button, Modal, message, Form, Input, Select } from "antd";
+import { FaMinus, FaPenToSquare, FaPlus, FaTrashCan } from "react-icons/fa6";
 
 const CartPage = () => {
   const [subTotal, setSubTotal] = useState(0);
@@ -98,20 +99,16 @@ const CartPage = () => {
       title: "Quantity",
       dataIndex: "_id",
       render: (id, record) => (
-        <div>
-          <MinusCircleOutlined
-            className="mx-3"
-            style={{ cursor: "pointer" }}
-            onClick={() => handleDecreament(record)}
-          />
+        <div className="quantity-counter">
+          <button onClick={() => handleDecreament(record)}>
+            <FaMinus size={15} />
+          </button>
 
           <b>{record.billQuantity}</b>
 
-          <PlusCircleOutlined
-            className="mx-3"
-            style={{ cursor: "pointer" }}
-            onClick={() => handleIncreament(record)}
-          />
+          <button onClick={() => handleIncreament(record)}>
+            <FaPlus size={15} />
+          </button>
         </div>
       ),
     },
@@ -119,12 +116,15 @@ const CartPage = () => {
       title: "Price (Rs.)",
       dataIndex: "_id",
       render: (id, record) => (
-        <div className="d-flex justify-content-between">
+        <div className="edit-price-outer">
           <b>{record.sellingPrice}</b>
-          <EditOutlined
-            style={{ cursor: "pointer" }}
+
+          <button
+            className="action-btn"
             onClick={() => handlePriceEdit(record)}
-          />
+          >
+            <FaPenToSquare size={15} />
+          </button>
         </div>
       ),
     },
@@ -132,17 +132,17 @@ const CartPage = () => {
       title: "Actions",
       dataIndex: "_id",
       render: (id, record) => (
-        <div>
-          <DeleteOutlined
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              dispatch({
-                type: "DELETE_FROM_CART",
-                payload: record,
-              });
-            }}
-          />
-        </div>
+        <button
+          className="action-btn"
+          onClick={() => {
+            dispatch({
+              type: "DELETE_FROM_CART",
+              payload: record,
+            });
+          }}
+        >
+          <FaTrashCan size={15} />
+        </button>
       ),
     },
   ];
@@ -210,8 +210,13 @@ const CartPage = () => {
   };
   return (
     <DefaultLayout>
-      <h1>Invoice</h1>
+      <div className="header">
+        {/* Header */}
+        <h2>Invoice</h2>
+      </div>
+
       <Table columns={columns} dataSource={billItems} bordered />
+
       {/* popup modal */}
       {popupModal && (
         <div className="overlay" onClick={() => setPopupModal(false)} />
@@ -240,7 +245,7 @@ const CartPage = () => {
       <div className="d-flex flex-column align-items-end">
         <hr />
         <h3>
-          Sub Total : ₹ <b>{subTotal}</b> /-{" "}
+          Total : ₹ <b>{subTotal}</b> /-{" "}
         </h3>
         <Button
           type="primary"

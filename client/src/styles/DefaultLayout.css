@@ -168,3 +168,16 @@ main {
   color: #ffffff;
   background-color: #15803d !important;
 }
+
+.ant-empty-description {
+  color: #f8fafc;
+}
+
+.ant-table-cell {
+  background-color: transparent !important;
+}
+
+.ant-table-thead > tr > th {
+  border-radius: 0 !important;
+  background-color: #0a0a0a !important;
+}

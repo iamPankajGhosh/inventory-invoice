@@ -769,3 +769,28 @@ input:focus{
   font-weight: 600;
   margin-top: 8px;
 }
+
+.quantity-counter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity-counter button {
+  height: 20px !important;
+  width: 20px;
+  padding: 5px;
+  border-radius: 50% !important;
+  background-color: #334155;
+  color: #f8fafc !important;
+}
+
+.edit-price-outer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit-price-outer button {
+  
+}
